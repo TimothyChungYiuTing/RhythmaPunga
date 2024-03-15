@@ -326,6 +326,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a340c3ce4325e244aafb5712abb7da26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputRecords: []
+  recording: 0
+  inputFileIndex: 0
 --- !u!4 &714429139
 Transform:
   m_ObjectHideFlags: 0

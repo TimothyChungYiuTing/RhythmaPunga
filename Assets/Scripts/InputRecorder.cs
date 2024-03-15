@@ -1,77 +1,89 @@
-using System.Collections;
-using System.Collections.Generic;using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 using System.IO;
 
 public class InputRecorder : MonoBehaviour
 {
-    private List<(KeyCode, float)> inputRecord = new List<(KeyCode, float)>();
-    private bool isRecording = false;
+    private float startTime;
+    public List<InputRecord> inputRecords;
+    private string filePath;
 
-    void Start()
+    public bool recording = false;
+    public int inputFileIndex = 0;
+
+    private List<string> fileNames = new()
     {
-        StartRecording();
+        "/Resources/Song0Input.json", //Testing
+        "/Resources/Song1Input.json",
+        "/Resources/Song2Input.json",
+        "/Resources/Song3Input.json",
+        "/Resources/Song4Input.json",
+    };
+
+    [System.Serializable]
+    public class InputRecord
+    {
+        public string note;
+        public float time;
     }
 
-    //Update is called once per frame
-    void Update()
+    [System.Serializable]
+    private class InputData
     {
-        if (isRecording)
-        {
-            RecordInput();
+        public InputRecord[] songNotesArray;
+    }
+
+    private void Start()
+    {
+        startTime = Time.time;
+        filePath = Application.dataPath + fileNames[inputFileIndex];
+
+        inputRecords = new();
+        if (!recording) {
+            LoadInputRecords();
         }
     }
 
-    //Record input when W, A, S, D keys are pressed
-    void RecordInput()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)) {
-            float timestamp = Time.time;
-            KeyCode key = Event.current.keyCode;
-            inputRecord.Add((key, timestamp));
-        }
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            StopRecording();
+        if (recording) {
+            if (Input.GetKeyDown(KeyCode.W))
+                RecordInput("W");
+            if (Input.GetKeyDown(KeyCode.A))
+                RecordInput("A");
+            if (Input.GetKeyDown(KeyCode.S))
+                RecordInput("S");
+            if (Input.GetKeyDown(KeyCode.D))
+                RecordInput("D");
         }
     }
 
-    //Start recording input
-    public void StartRecording()
+    private void RecordInput(string note)
     {
-        isRecording = true;
+        InputRecord record = new InputRecord();
+        record.note = note;
+        record.time = Time.time - startTime;
+        inputRecords.Add(record);
+        SaveInputRecords();
     }
 
-    //Stop recording input
-    public void StopRecording()
+    private void SaveInputRecords()
     {
-        isRecording = false;
-        SaveInputRecordToJson();
-    }
+        InputData inputData = new() { songNotesArray = inputRecords.ToArray() };
 
-    //Save input record to JSON file
-    void SaveInputRecordToJson()
-    {
-        //Load existing JSON file from Resources folder
-        TextAsset existingJson = Resources.Load<TextAsset>("existingInputRecord");
-        if (existingJson == null)
-        {
-            Debug.LogError("Existing JSON file not found in Resources folder.");
-            return;
-        }
+        string json = JsonUtility.ToJson(inputData, true);
 
-        //Parse existing JSON data
-        List<(KeyCode, float)> existingInputRecord = JsonUtility.FromJson<List<(KeyCode, float)>>(existingJson.text);
-
-        //Append new data to existing record
-        existingInputRecord.AddRange(inputRecord);
-
-        //Convert to JSON string
-        string json = JsonUtility.ToJson(existingInputRecord);
-
-        //Save JSON string to a new file outside Resources folder
-        string filePath = Application.persistentDataPath + "/Song0Input.json";
         File.WriteAllText(filePath, json);
+    }
 
-        Debug.Log("Input record saved to: " + filePath);
+    private void LoadInputRecords()
+    {
+        if (File.Exists(filePath)) {
+            string json = File.ReadAllText(filePath);
+            InputData inputData = JsonUtility.FromJson<InputData>(json);
+            if (inputData != null && inputData.songNotesArray != null) {
+                inputRecords.AddRange(inputData.songNotesArray);
+            }
+        }
     }
 }
