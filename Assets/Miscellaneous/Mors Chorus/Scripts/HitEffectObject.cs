@@ -6,9 +6,13 @@ public class HitEffectObject : MonoBehaviour
 {
     public float lifetime = 1f;
 
-    void Start() {
-         }
+    void Start()
+    {
+        Destroy(gameObject, lifetime);
+    }
 
-    void Update() {
-        Destroy(gameObject, lifetime); }
+    void Update()
+    {
+
+    }
 }

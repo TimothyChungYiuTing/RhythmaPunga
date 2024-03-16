@@ -40,7 +40,8 @@ public class NoteObject : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Activator") {
-            canBePressed = true; } }
+            canBePressed = true; }
+    }
 
     private void OnTriggerExit2D(Collider2D other) {
         if (other.tag == "Activator") {
@@ -49,5 +50,6 @@ public class NoteObject : MonoBehaviour
             if (!obtained) {
                 Debug.Log ("Note Missed");
                 Instantiate(missEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10, 10))), effectsHolder.transform);
-                GameManager2.instance.NoteMissed();} } }
+                GameManager2.instance.NoteMissed();} }
+    }
 }
