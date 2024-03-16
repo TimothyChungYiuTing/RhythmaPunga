@@ -2,14 +2,30 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 
+
+[System.Serializable]
+public class InputRecord
+{
+    public string note;
+    public float time;
+}
+
+[System.Serializable]
+public class InputData
+{
+    public InputRecord[] songNotesArray;
+}
+
 public class InputRecorder : MonoBehaviour
 {
-    private float startTime;
+    public float startTime;
     public List<InputRecord> inputRecords;
     private string filePath;
 
     public bool recording = false;
     public int inputFileIndex = 0;
+
+    public NoteManager noteManager;
 
     private List<string> fileNames = new()
     {
@@ -20,25 +36,14 @@ public class InputRecorder : MonoBehaviour
         "/Resources/Song4Input.json",
     };
 
-    [System.Serializable]
-    public class InputRecord
-    {
-        public string note;
-        public float time;
-    }
-
-    [System.Serializable]
-    private class InputData
-    {
-        public InputRecord[] songNotesArray;
-    }
-
     private void Start()
     {
+        noteManager = FindObjectOfType<NoteManager>();
         startTime = Time.time;
         filePath = Application.dataPath + fileNames[inputFileIndex];
 
         inputRecords = new();
+        noteManager.notes = new();
         if (!recording) {
             LoadInputRecords();
         }
@@ -83,7 +88,9 @@ public class InputRecorder : MonoBehaviour
             InputData inputData = JsonUtility.FromJson<InputData>(json);
             if (inputData != null && inputData.songNotesArray != null) {
                 inputRecords.AddRange(inputData.songNotesArray);
+                noteManager.notes.AddRange(inputData.songNotesArray);
             }
         }
+        noteManager.InstantiateNotes();
     }
 }

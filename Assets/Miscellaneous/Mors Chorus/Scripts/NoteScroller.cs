@@ -10,13 +10,19 @@ public class NoteScroller : MonoBehaviour
     [Header("Flags")]
     public bool songStarted;
 
-    void Start() {
-        beatTempo = beatTempo / 60f; }
+    void Start()
+    {
+        beatTempo = beatTempo / 60f;
+    }
 
-    void Update() {
+    void Update()
+    {
         if (!songStarted) { /*
             if (Input.anyKeyDown) {
-                songStarted = true; } */ }
+                songStarted = true; } */
+        }
         else {
-            transform.position -= new Vector3 (0f, beatTempo * Time.deltaTime, 0f); } }
+            transform.position -= new Vector3 (0f, beatTempo * Time.deltaTime, 0f);
+        }
+    }
 }

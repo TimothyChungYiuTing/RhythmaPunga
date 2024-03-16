@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AudioPlayer : MonoBehaviour
 {
-    private AudioSource audioSource;
+    [HideInInspector] public AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()

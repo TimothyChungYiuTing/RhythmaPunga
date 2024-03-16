@@ -5,17 +5,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class GameManager2 : MonoBehaviour
+public class ScoreSystem : Singleton<ScoreSystem>
 {
-    [Header("Assets")]
-    public AudioSource levelMusic;
-    public NoteScroller NSScript;
-
     [Header("Flags")]
     public bool playMusic;
-
-    [Header("Detector")]
-    public static GameManager2 instance;
 
     [Header("Score")]
     public int currentScore;
@@ -30,8 +23,8 @@ public class GameManager2 : MonoBehaviour
     public int[] multiplierThreshold;
 
     [Header("Text")]
-    public TMP_Text scoreText;
-    public TMP_Text multiplierText;
+    //public TMP_Text scoreText;
+    //public TMP_Text multiplierText;
 
     [Header("Results")]
     public float totalNotes;
@@ -51,16 +44,14 @@ public class GameManager2 : MonoBehaviour
     public TMP_Text rankText;
     public TMP_Text finalScoreText;
 
+    [Header("AudioPlayer")]
+    private AudioPlayer audioPlayer;
+
     void Start() {
-        //ensure that the GameManager is initialised
-        if (instance == null) {
-            instance = this; }
-        else {
-            Debug.LogWarning("Duplicate GameManager instance detected. Destroying this one.");
-            Destroy(gameObject); }
+        audioPlayer = FindObjectOfType<AudioPlayer>();
 
         //display the score as 0 from the beginning
-        scoreText.text = "Score: 0";
+            //scoreText.text = "Score: 0";
         
         //start multiplier at 1 and tracker at 0
         currentMiltiplier = 1;
@@ -70,16 +61,13 @@ public class GameManager2 : MonoBehaviour
         totalNotes = FindObjectsOfType <NoteObject>().Length; }
 
     //only begin the music once the game has started, only start the game when a putton is pressed
-    void Update() {
-        //start the game
-        if (!playMusic) {
-            if (Input.anyKeyDown) {
-                playMusic = true;
-                NSScript.songStarted = true;
-            
-                levelMusic.Play(); } }
+    void Update()
+    {
         //end of game, show results screen
-        else if (!levelMusic.isPlaying && !resultsScreen.activeInHierarchy) {
+
+        //Deactivated by Timothy for now
+        /*
+        if (!audioPlayer.audioSource.isPlaying && !resultsScreen.activeInHierarchy) {
             resultsScreen.SetActive (true);
             //calculate hits
             normalNotesText.text = "" + normalHits;
@@ -92,16 +80,25 @@ public class GameManager2 : MonoBehaviour
             percentHitText.text = percentHit.ToString ("F2") + "%";
             //rank
             rankText.text = "F";
-            if (percentHit > 30) { rankText.text = "E";
-                if (percentHit > 45) { rankText.text = "D";
-                    if (percentHit > 60) { rankText.text = "C";
-                        if (percentHit > 75) { rankText.text = "B";
-                            if (percentHit > 90) { rankText.text = "A"; } } } } }
+            if (percentHit > 30)
+                rankText.text = "E";
+            if (percentHit > 45)
+                rankText.text = "D";
+            if (percentHit > 60)
+                rankText.text = "C";
+            if (percentHit > 75)
+                rankText.text = "B";
+            if (percentHit > 90)
+                rankText.text = "A";
         
-            finalScoreText.text = currentScore.ToString(); } }
+            finalScoreText.text = currentScore.ToString();
+        }
+        */
+    }
 
     //when the player hits a note, they recieve points, if they miss they recieve nothing
-    public void NoteHit() { 
+    public void NoteHit()
+    { 
         Debug.Log("Note Hit");
 
         //track multiplier
@@ -109,27 +106,37 @@ public class GameManager2 : MonoBehaviour
             multiplierTracker ++;
             if (multiplierThreshold[currentMiltiplier - 1] <= multiplierTracker) {
                 multiplierTracker = 0;
-                currentMiltiplier ++; } }
+                currentMiltiplier ++;
+            }
+        }
 
         //update multiplier UI text
-        multiplierText.text = "Multiplier: x" + currentMiltiplier;
+                        //multiplierText.text = "Multiplier: x" + currentMiltiplier;
         //update score UI text
-        scoreText.text = "Score: " + currentScore; }
+                        //scoreText.text = "Score: " + currentScore;
+    }
 
-    public void NormalHit() {
+    public void NormalHit()
+    {
         currentScore += normalNote * currentMiltiplier;
         normalHits++;
-        NoteHit(); }
-    public void GoodHit() {
+        NoteHit();
+    }
+    public void GoodHit()
+    {
         currentScore += goodNote * currentMiltiplier;
         goodHits++;
-        NoteHit(); }
-    public void PerfectHit() {
+        NoteHit();
+    }
+    public void PerfectHit()
+    {
         currentScore += perfectNote * currentMiltiplier;
         perfectHits++;
-        NoteHit(); }
+        NoteHit();
+    }
 
-    public void NoteMissed() {
+    public void NoteMissed()
+    {
         Debug.Log("Note Missed");
         missedHits++;
     
@@ -138,5 +145,6 @@ public class GameManager2 : MonoBehaviour
         multiplierTracker = 0;
 
         //update multiplier UI text
-        multiplierText.text = "Multiplier: x" + currentMiltiplier; }
+                        //multiplierText.text = "Multiplier: x" + currentMiltiplier;
+    }
 }
