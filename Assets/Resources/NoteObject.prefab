@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4f755e398ac0754bb2dff8dba3e4a71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteType: 0
+  noteType: 4
   noteDirection: 0
   hitTime: 0
   canBePressed: 0

@@ -39,7 +39,7 @@ public class NoteManager : MonoBehaviour
             else if (inputRecord.note == "D")
                 noteObject_inInstantiated.noteDirection = NoteObject.NoteDirection.D;
 
-            noteObject_inInstantiated.hitTime = inputRecord.time + offset;  //Add offset to hitTIme
+            noteObject_inInstantiated.hitTime = inputRecord.time + offset;  //Add offset to hitTime
         }
     }
 }

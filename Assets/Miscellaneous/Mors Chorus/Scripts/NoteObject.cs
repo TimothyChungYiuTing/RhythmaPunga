@@ -8,6 +8,7 @@ public class NoteObject : MonoBehaviour
     public enum NoteDirection {W, A, S, D}
 
     [Header("NoteCustomization")]
+    private SpriteRenderer spriteRenderer;
     public NoteType noteType;
     public NoteDirection noteDirection;
     public float hitTime;
@@ -37,6 +38,7 @@ public class NoteObject : MonoBehaviour
     void Start()
     {
         startTime = FindObjectOfType<InputRecorder>().startTime;
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         effectsHolder = FindObjectOfType<EffectsHolder>().gameObject;
 
@@ -106,14 +108,46 @@ public class NoteObject : MonoBehaviour
                 }
                 break;
             case NoteType.Shuriken:
+                moveSpeed = 21f;
+                if (hitTime - (Time.time-startTime) <  2f) {
+                    transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
+                }
                 break;
             case NoteType.Heal:
+                moveSpeed = 7f;
+                if (hitTime - (Time.time-startTime) <  2f) {
+                    transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
+                }
+                spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, Mathf.Clamp01(Mathf.Sin(Time.time * 8f) * 0.7f + 0.5f));
+                
                 break;
             case NoteType.Shield:
+                moveSpeed = 7f;
+                spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0f);
+                if (hitTime - (Time.time-startTime) <  0.5f) {
+                    spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, (0.5f - (hitTime - (Time.time-startTime))) * 10f);
+                    transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
+                }
                 break;
             case NoteType.Fire:
+                moveSpeed = 5f;
+                if (hitTime - (Time.time-startTime) <  2f) {
+                    transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Mathf.Lerp(2.3f, 1.4f, hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
+                }
                 break;
             case NoteType.Zap:
+                moveSpeed = 5f;
+                if (hitTime - (Time.time-startTime) <  2f) {
+                    float posMult;
+                    if (hitTime - (Time.time-startTime) < 0.3f) {
+                        posMult = (hitTime - (Time.time-startTime))*2f;
+                    } else if (hitTime - (Time.time-startTime) < 0.6f) {
+                        posMult = 0.6f;
+                    } else {
+                        posMult = hitTime - (Time.time-startTime);
+                    }
+                    transform.position = targetPositon - moveDirectionRotation * (posMult * Vector3.left * moveSpeed);
+                }
                 break;
             case NoteType.Poison:
                 break;
@@ -150,7 +184,7 @@ public class NoteObject : MonoBehaviour
             }
 
             Destroy(gameObject);
-
+            
         }
     }
 }
