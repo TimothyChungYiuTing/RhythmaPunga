@@ -26,7 +26,7 @@ public class GameManager : Singleton<GameManager>
     void Update()
     {
         //Debug
-        if (Input.GetKey(KeyCode.R)) {
+        if (Input.GetKeyDown(KeyCode.R)) {
             /*
             Time.timeScale = 1f;
             AudioManager.Instance.spatialBlend = 0f;
@@ -34,5 +34,20 @@ public class GameManager : Singleton<GameManager>
             AudioManager.Instance.ChangeSong(0);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+
+
+        //DEBUG ONLY
+        if (Input.GetKeyDown(KeyCode.P)) {
+            RandomizeChooseItems();
+            FindObjectOfType<InGameCanvas>().LoadChooseItems();
+        }
+    }
+
+    private void RandomizeChooseItems()
+    {
+        chooseNoteTypes[0] = (NoteType)Random.Range(0,7);
+        do {
+            chooseNoteTypes[1] = (NoteType)Random.Range(0,7);
+        } while (chooseNoteTypes[1] == chooseNoteTypes[0]);
     }
 }

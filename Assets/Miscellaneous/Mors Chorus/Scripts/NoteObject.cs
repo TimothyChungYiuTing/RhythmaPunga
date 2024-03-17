@@ -158,10 +158,10 @@ public class NoteObject : MonoBehaviour
                 moveSpeed = 5f;
                 if (hitTime - (Time.time-startTime) <  2f) {
                     float posMult;
-                    if (hitTime - (Time.time-startTime) < 0.3f) {
-                        posMult = (hitTime - (Time.time-startTime))*3f;
-                    } else if (hitTime - (Time.time-startTime) < 0.9f) {
-                        posMult = 0.9f;
+                    if (hitTime - (Time.time-startTime) < 0.4f) {
+                        posMult = (hitTime - (Time.time-startTime))*2.5f;
+                    } else if (hitTime - (Time.time-startTime) < 1f) {
+                        posMult = 1f;
                     } else {
                         posMult = hitTime - (Time.time-startTime);
                     }

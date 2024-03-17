@@ -30,14 +30,22 @@ public class NoteManager : MonoBehaviour
         foreach (InputRecord inputRecord in notes) {
             GameObject noteInstantiated = Instantiate(NotePrefab, new Vector3(-50f, 20f, 6f), Quaternion.identity);
             NoteObject noteObject_inInstantiated = noteInstantiated.GetComponent<NoteObject>();
-            if (inputRecord.note == "W")
+            if (inputRecord.note == "W") {
                 noteObject_inInstantiated.noteDirection = NoteObject.NoteDirection.W;
-            else if (inputRecord.note == "A")
+                noteObject_inInstantiated.noteType = GameManager.Instance.noteTypes[1];
+            }
+            else if (inputRecord.note == "A") {
                 noteObject_inInstantiated.noteDirection = NoteObject.NoteDirection.A;
-            else if (inputRecord.note == "S")
+                noteObject_inInstantiated.noteType = GameManager.Instance.noteTypes[2];
+            }
+            else if (inputRecord.note == "S") {
                 noteObject_inInstantiated.noteDirection = NoteObject.NoteDirection.S;
-            else if (inputRecord.note == "D")
+                noteObject_inInstantiated.noteType = GameManager.Instance.noteTypes[3];
+            }
+            else if (inputRecord.note == "D") {
                 noteObject_inInstantiated.noteDirection = NoteObject.NoteDirection.D;
+                noteObject_inInstantiated.noteType = GameManager.Instance.noteTypes[0];
+            }
 
             noteObject_inInstantiated.hitTime = inputRecord.time + offset;  //Add offset to hitTime
         }
