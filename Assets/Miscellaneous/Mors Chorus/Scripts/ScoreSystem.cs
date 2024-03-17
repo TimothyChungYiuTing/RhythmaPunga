@@ -44,8 +44,15 @@ public class ScoreSystem : Singleton<ScoreSystem>
     public TMP_Text rankText;
     public TMP_Text finalScoreText;
 
+    public InputRecorder inputRecorder;
+
     [Header("AudioPlayer")]
     private AudioPlayer audioPlayer;
+
+    [Header("Song")]
+    public bool songStarted = false;
+    public InGameCanvas inGameCanvas;
+
 
     void Start() {
         audioPlayer = FindObjectOfType<AudioPlayer>();
@@ -63,6 +70,22 @@ public class ScoreSystem : Singleton<ScoreSystem>
     //only begin the music once the game has started, only start the game when a putton is pressed
     void Update()
     {
+        if (!songStarted && Input.GetKeyDown(KeyCode.Space)) {
+            songStarted = true;
+            
+            audioPlayer.audioSource.Play();
+            inputRecorder.startTime = Time.time;
+
+            inGameCanvas.StartPopup.SetActive(false);
+
+            foreach (NoteObject noteObject in FindObjectsOfType<NoteObject>()) {
+                noteObject.startTime = inputRecorder.startTime;
+            }
+        }
+        if (!audioPlayer.audioSource.isPlaying) {
+            songStarted = false;
+        }
+
         //end of game, show results screen
 
         //Deactivated by Timothy for now

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class InGameCanvas : MonoBehaviour
 {
@@ -10,6 +11,16 @@ public class InGameCanvas : MonoBehaviour
     public List<Image> ItemContents;
 
     public int selected = -1;
+    public GameObject StartPopup;
+    public TextMeshProUGUI Text_BossName;
+    private List<String> bossNames = new()
+    {
+        "Sloth",
+        "Greed",
+        "Gluttony",
+        "Wrath"
+    };
+
     public GameObject ChoosePopup;
     public TextMeshProUGUI Text_ChooseOne;
     public List<Image> ChooseItemFrames;
@@ -75,7 +86,7 @@ public class InGameCanvas : MonoBehaviour
         if (selected != -1) {
             if (selected < 2) {
                 GameManager.Instance.noteTypes[swapID] = GameManager.Instance.chooseNoteTypes[selected];
-                
+
                 selected = -1;
                 ReloadItems();
                 

@@ -15,6 +15,8 @@ public class GameManager : Singleton<GameManager>
     public List<NoteType> chooseNoteTypes;
     public List<int> otherItemsID = new(); //Not used for now
 
+    private List<int> bossHealths = new() {1500, 2000, 2500, 3000};
+    private List<int> bossAttacks = new() {5, 4, 5, 3};
 
     // Start is called before the first frame update
     void Start()

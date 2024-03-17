@@ -39,13 +39,13 @@ public class InputRecorder : MonoBehaviour
     private void Start()
     {
         noteManager = FindObjectOfType<NoteManager>();
-        startTime = Time.time;
         filePath = Application.dataPath + fileNames[inputFileIndex];
-
+        
         inputRecords = new();
         noteManager.notes = new();
+        
         if (!recording) {
-            LoadInputRecords();
+            LoadInputRecords(); //Make sure only run next part of code after all notes instantiated
         }
     }
 
@@ -81,7 +81,7 @@ public class InputRecorder : MonoBehaviour
         File.WriteAllText(filePath, json);
     }
 
-    private void LoadInputRecords()
+    public void LoadInputRecords()
     {
         if (File.Exists(filePath)) {
             string json = File.ReadAllText(filePath);

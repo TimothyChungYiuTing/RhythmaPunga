@@ -33,7 +33,7 @@ public class NoteObject : MonoBehaviour
     public GameObject effectsHolder;
 
     [Header("Calibration Sync")]
-    private float startTime; //Reference to the start time of the scene, when the song starts playing
+    public float startTime; //Reference to the start time of the scene, when the song starts playing
     private Transform collidedActivator = null;
 
     void Start()
