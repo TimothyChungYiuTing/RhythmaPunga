@@ -12,6 +12,7 @@ public class GameManager : Singleton<GameManager>
 {
 
     public List<NoteType> noteTypes;
+    public List<NoteType> chooseNoteTypes;
     public List<int> otherItemsID = new(); //Not used for now
 
 
