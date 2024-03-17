@@ -49,16 +49,13 @@ public class ScoreSystem : Singleton<ScoreSystem>
     [Header("AudioPlayer")]
     private AudioPlayer audioPlayer;
 
-<<<<<<< Updated upstream
     [Header("Song")]
     public bool shopping = false;
     public bool songStarted = false;
     public InGameCanvas inGameCanvas;
 
-=======
     [Header("Calibration Sync")]
     public float offset = 0f;  //Calibration syncing, added onto hitTime
->>>>>>> Stashed changes
 
     void Start() {
         audioPlayer = FindObjectOfType<AudioPlayer>();

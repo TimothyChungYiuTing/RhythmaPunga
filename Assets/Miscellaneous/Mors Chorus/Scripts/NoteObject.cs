@@ -151,7 +151,7 @@ public class NoteObject : MonoBehaviour
             case NoteType.Fire:
                 moveSpeed = 5f;
                 if (hitTime - (Time.time-startTime) <  2f) {
-                    transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Mathf.Lerp(2.3f, 1.4f, hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
+                    transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Mathf.Lerp(2.4f, 1.25f, hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
                 }
                 break;
             case NoteType.Zap:

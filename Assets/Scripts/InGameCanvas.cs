@@ -36,6 +36,7 @@ public class InGameCanvas : MonoBehaviour
     {
         ReloadItems();
         
+        GameManager.Instance.RandomizeChooseItems();
         LoadChooseItems();
     }
 
@@ -79,6 +80,7 @@ public class InGameCanvas : MonoBehaviour
 
     public void CloseChooseItems()
     {
+        FindObjectOfType<InputRecorder>().TryLoadInputRecords();
         ScoreSystem.Instance.shopping = false;
         ChoosePopup.SetActive(false);
         choosingItem = false;
@@ -93,6 +95,7 @@ public class InGameCanvas : MonoBehaviour
                 selected = -1;
                 ReloadItems();
                 
+                FindObjectOfType<InputRecorder>().TryLoadInputRecords();
                 ScoreSystem.Instance.shopping = false;
                 ChoosePopup.SetActive(false);
                 choosingItem = false;

@@ -43,11 +43,7 @@ public class NoteManager : MonoBehaviour
                 noteObject_inInstantiated.noteType = GameManager.Instance.noteTypes[0];
             }
 
-<<<<<<< Updated upstream
-            noteObject_inInstantiated.hitTime = inputRecord.time + offset;  //Add offset to hitTime
-=======
             noteObject_inInstantiated.hitTime = inputRecord.time + ScoreSystem.Instance.offset;  //Add offset to hitTIme
->>>>>>> Stashed changes
         }
     }
 }

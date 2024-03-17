@@ -45,7 +45,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private void RandomizeChooseItems()
+    public void RandomizeChooseItems()
     {
         chooseNoteTypes[0] = (NoteType)Random.Range(0,7);
         do {

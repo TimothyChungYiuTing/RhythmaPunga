@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using System;
 
 
 [System.Serializable]
@@ -43,9 +44,14 @@ public class InputRecorder : MonoBehaviour
         
         inputRecords = new();
         noteManager.notes = new();
-        
+
+        //TryLoadInputRecords();
+    }
+
+    public void TryLoadInputRecords()
+    {
         if (!recording) {
-            LoadInputRecords(); //Make sure only run next part of code after all notes instantiated
+            LoadInputRecords();
         }
     }
 
