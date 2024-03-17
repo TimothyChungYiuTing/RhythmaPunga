@@ -10,10 +10,6 @@ public class NoteManager : MonoBehaviour
     [Header("NotePrefabs")]
     public GameObject NotePrefab;
 
-    [Header("Calibration Sync")]
-    public float offset = 0f;  //Calibration syncing, added onto hitTime
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +43,11 @@ public class NoteManager : MonoBehaviour
                 noteObject_inInstantiated.noteType = GameManager.Instance.noteTypes[0];
             }
 
+<<<<<<< Updated upstream
             noteObject_inInstantiated.hitTime = inputRecord.time + offset;  //Add offset to hitTime
+=======
+            noteObject_inInstantiated.hitTime = inputRecord.time + ScoreSystem.Instance.offset;  //Add offset to hitTIme
+>>>>>>> Stashed changes
         }
     }
 }
