@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 4973625933730666123}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 6}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.17515779, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -99,7 +99,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4f755e398ac0754bb2dff8dba3e4a71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteType: 4
+  noteSprites:
+  - {fileID: 21300000, guid: b2b97ae03114a144cad4d39c8ed89676, type: 3}
+  - {fileID: 21300000, guid: b69653ff5be6c4049aca79f0592bbf93, type: 3}
+  - {fileID: 21300000, guid: a6be1010b695b684aa0590484a07b0cb, type: 3}
+  - {fileID: 21300000, guid: ded8d723c5941f34ab459847d75e57c3, type: 3}
+  - {fileID: 21300000, guid: e15c3a70fed0a264b8e56af5b786f841, type: 3}
+  - {fileID: 21300000, guid: 6ab69779d14186845b200c221362efab, type: 3}
+  - {fileID: 21300000, guid: d04bacfc982a30846967642c2b713615, type: 3}
+  - {fileID: 21300000, guid: 0f87e5846159cad43aa16dd7d44d186d, type: 3}
+  - {fileID: 21300000, guid: 468be6cb5b29f494fb54e5e75fb4c0e5, type: 3}
+  - {fileID: 21300000, guid: 861607d2dd90d0649ac6603cb0ddae43, type: 3}
+  - {fileID: 21300000, guid: a9dacd556b2362547ae203bbba3316a0, type: 3}
+  - {fileID: 21300000, guid: 230a80512379bc14cbc3c33ec904321d, type: 3}
+  noteType: 2
   noteDirection: 0
   hitTime: 0
   canBePressed: 0

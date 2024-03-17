@@ -5,10 +5,11 @@ using UnityEngine;
 public class NoteObject : MonoBehaviour
 {
     public enum NoteType {Normal, Shuriken, Heal, Shield, Fire, Zap, Poison, Sloth, Greed, GluttonyFast, GluttonySlow, Wrath}
-    public enum NoteDirection {W, A, S, D}
+    public enum NoteDirection {D, W, A, S}
 
     [Header("NoteCustomization")]
     private SpriteRenderer spriteRenderer;
+    public List<Sprite> noteSprites;
     public NoteType noteType;
     public NoteDirection noteDirection;
     public float hitTime;
@@ -39,6 +40,7 @@ public class NoteObject : MonoBehaviour
     {
         startTime = FindObjectOfType<InputRecorder>().startTime;
         spriteRenderer = GetComponent<SpriteRenderer>();
+        Setup();
 
         effectsHolder = FindObjectOfType<EffectsHolder>().gameObject;
 
@@ -76,13 +78,13 @@ public class NoteObject : MonoBehaviour
 
                 //TODO: Change to Distance check
                 //TODO: Prioritize closest note and only remove that note
-                if (Vector2.Distance(transform.position, collidedActivator.position) > 0.5) {
+                if (Vector2.Distance(transform.position, collidedActivator.position) > 0.6) {
                     Debug.Log("Normal Hit");
                     Instantiate(normalEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
                     ScoreSystem.Instance.NormalHit();
                     Destroy(gameObject);
                 }
-                else if (Vector2.Distance(transform.position, collidedActivator.position) > 0.35) {
+                else if (Vector2.Distance(transform.position, collidedActivator.position) > 0.4) {
                     Debug.Log("Good Hit!");
                     Instantiate(goodEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
                     ScoreSystem.Instance.GoodHit();
@@ -98,23 +100,40 @@ public class NoteObject : MonoBehaviour
         }
     }
 
+    private void Setup()
+    {
+        spriteRenderer.sprite = noteSprites[(int)noteType];
+        transform.localRotation = Quaternion.Euler(0f, 0f, (int)noteDirection * 90f);
+
+        if ((int)noteType > 6) {
+            spriteRenderer.color = Color.red;
+            if (noteType == NoteType.GluttonyFast) {
+                spriteRenderer.color = Color.cyan;
+            }
+            else if (noteType == NoteType.Wrath) {
+                spriteRenderer.color = Color.yellow;
+            }
+        }
+    }
+
     private void Positioning()
     {
         switch (noteType) {
             case NoteType.Normal:
-                moveSpeed = 7f;
+                moveSpeed = 8f;
                 if (hitTime - (Time.time-startTime) <  2f) {
                     transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
                 }
                 break;
             case NoteType.Shuriken:
-                moveSpeed = 21f;
+                moveSpeed = 15f;
                 if (hitTime - (Time.time-startTime) <  2f) {
                     transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
+                    transform.localRotation = Quaternion.Euler(0f, 0f, (hitTime - (Time.time-startTime)) * (int)noteDirection * 90f);
                 }
                 break;
             case NoteType.Heal:
-                moveSpeed = 7f;
+                moveSpeed = 8f;
                 if (hitTime - (Time.time-startTime) <  2f) {
                     transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
                 }
@@ -122,7 +141,7 @@ public class NoteObject : MonoBehaviour
                 
                 break;
             case NoteType.Shield:
-                moveSpeed = 7f;
+                moveSpeed = 8f;
                 spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0f);
                 if (hitTime - (Time.time-startTime) <  0.5f) {
                     spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, (0.5f - (hitTime - (Time.time-startTime))) * 10f);
@@ -140,9 +159,9 @@ public class NoteObject : MonoBehaviour
                 if (hitTime - (Time.time-startTime) <  2f) {
                     float posMult;
                     if (hitTime - (Time.time-startTime) < 0.3f) {
-                        posMult = (hitTime - (Time.time-startTime))*2f;
-                    } else if (hitTime - (Time.time-startTime) < 0.6f) {
-                        posMult = 0.6f;
+                        posMult = (hitTime - (Time.time-startTime))*3f;
+                    } else if (hitTime - (Time.time-startTime) < 0.9f) {
+                        posMult = 0.9f;
                     } else {
                         posMult = hitTime - (Time.time-startTime);
                     }
@@ -150,16 +169,41 @@ public class NoteObject : MonoBehaviour
                 }
                 break;
             case NoteType.Poison:
+                moveSpeed = 8f;
+                if (hitTime - (Time.time-startTime) <  2f) {
+                    transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed) + moveDirectionRotation * (Vector3.up * Mathf.Sin((hitTime - (Time.time-startTime)) * 6f) * 0.5f);
+                }
                 break;
             case NoteType.Sloth:
+                moveSpeed = 5f;
+                if (hitTime - (Time.time-startTime) <  2f) {
+                    transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
+                }
                 break;
             case NoteType.Greed:
+                moveSpeed = 6f;
+                if (hitTime - (Time.time-startTime) <  2f) {
+                    transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Mathf.Lerp(2.3f, 1.4f, hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
+                    transform.position += moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.up * moveSpeed);
+                }
                 break;
             case NoteType.GluttonyFast:
+                moveSpeed = 12f;
+                if (hitTime - (Time.time-startTime) <  2f) {
+                    transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
+                }
                 break;
             case NoteType.GluttonySlow:
+                moveSpeed = 5f;
+                if (hitTime - (Time.time-startTime) <  2f) {
+                    transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
+                }
                 break;
             case NoteType.Wrath:
+                moveSpeed = 5f + (Time.time-startTime) * 0.15f;
+                if (hitTime - (Time.time-startTime) <  8f) {
+                    transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
+                }
                 break;
         }
     }
