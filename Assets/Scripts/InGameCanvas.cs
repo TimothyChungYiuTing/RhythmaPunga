@@ -35,7 +35,8 @@ public class InGameCanvas : MonoBehaviour
     void Start()
     {
         ReloadItems();
-        //LoadChooseItems();
+        
+        LoadChooseItems();
     }
 
     // Update is called once per frame
@@ -54,6 +55,7 @@ public class InGameCanvas : MonoBehaviour
 
     public void LoadChooseItems()
     {
+        ScoreSystem.Instance.shopping = true;
         selected = -1;
         Text_ChooseOne.text = "Choose One";
         ChoosePopup.SetActive(true);
@@ -77,6 +79,7 @@ public class InGameCanvas : MonoBehaviour
 
     public void CloseChooseItems()
     {
+        ScoreSystem.Instance.shopping = false;
         ChoosePopup.SetActive(false);
         choosingItem = false;
     }
@@ -90,6 +93,7 @@ public class InGameCanvas : MonoBehaviour
                 selected = -1;
                 ReloadItems();
                 
+                ScoreSystem.Instance.shopping = false;
                 ChoosePopup.SetActive(false);
                 choosingItem = false;
             } else {

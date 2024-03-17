@@ -50,6 +50,7 @@ public class ScoreSystem : Singleton<ScoreSystem>
     private AudioPlayer audioPlayer;
 
     [Header("Song")]
+    public bool shopping = false;
     public bool songStarted = false;
     public InGameCanvas inGameCanvas;
 
@@ -70,7 +71,7 @@ public class ScoreSystem : Singleton<ScoreSystem>
     //only begin the music once the game has started, only start the game when a putton is pressed
     void Update()
     {
-        if (!songStarted && Input.GetKeyDown(KeyCode.Space)) {
+        if (!shopping && !songStarted && Input.GetKeyDown(KeyCode.Space)) {
             songStarted = true;
             
             audioPlayer.audioSource.Play();

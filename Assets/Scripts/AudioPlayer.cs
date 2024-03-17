@@ -16,12 +16,6 @@ public class AudioPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isGameSongPlaying && Input.GetKeyDown(KeyCode.Space)) {
-            isGameSongPlaying = true;
-            audioSource.Play();
-        }
-        if (!audioSource.isPlaying) {
-            isGameSongPlaying = false;
-        }
+        
     }
 }

@@ -3423,6 +3423,7 @@ MonoBehaviour:
   rankText: {fileID: 0}
   finalScoreText: {fileID: 0}
   inputRecorder: {fileID: 714429138}
+  shopping: 0
   songStarted: 0
   inGameCanvas: {fileID: 1463074825}
 --- !u!4 &1154957192
@@ -4240,7 +4241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9024c46b069ad54bb112b97717ddbb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteTypes: 04000000050000000600000003000000
+  noteTypes: 00000000000000000000000000000000
   chooseNoteTypes: 0000000000000000
   otherItemsID: 
 --- !u!1 &1389033546
