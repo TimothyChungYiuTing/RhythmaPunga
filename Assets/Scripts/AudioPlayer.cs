@@ -5,7 +5,7 @@ using UnityEngine;
 public class AudioPlayer : MonoBehaviour
 {
     [HideInInspector] public AudioSource audioSource;
-    private bool isGameSongPlaying = false;
+    public List<AudioClip> songClips;
 
     // Start is called before the first frame update
     void Start()
@@ -16,6 +16,6 @@ public class AudioPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

@@ -76,6 +76,7 @@ public class ScoreSystem : Singleton<ScoreSystem>
         if (!shopping && !songStarted && Input.GetKeyDown(KeyCode.Space)) {
             songStarted = true;
             
+            audioPlayer.audioSource.clip = audioPlayer.songClips[inputRecorder.inputFileIndex];
             audioPlayer.audioSource.Play();
             inputRecorder.startTime = Time.time;
 
