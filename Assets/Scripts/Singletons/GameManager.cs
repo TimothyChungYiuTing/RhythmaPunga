@@ -11,6 +11,8 @@ public enum State {
 public class GameManager : Singleton<GameManager>
 {
 
+    public List<NoteType> noteTypes = new() {NoteType.Normal, NoteType.Normal, NoteType.Normal, NoteType.Normal};
+    
     // Start is called before the first frame update
     void Start()
     {
