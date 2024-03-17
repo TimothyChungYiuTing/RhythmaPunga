@@ -181,7 +181,7 @@ public class NoteObject : MonoBehaviour
                 }
                 break;
             case NoteType.Greed:
-                moveSpeed = 6f;
+                moveSpeed = 5.5f;
                 if (hitTime - (Time.time-startTime) <  2f) {
                     transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Mathf.Lerp(2.3f, 1.4f, hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
                     transform.position += moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.up * moveSpeed);
@@ -200,7 +200,7 @@ public class NoteObject : MonoBehaviour
                 }
                 break;
             case NoteType.Wrath:
-                moveSpeed = 5f + (Time.time-startTime) * 0.15f;
+                moveSpeed = 5f + (Time.time-startTime) * 0.11f;
                 if (hitTime - (Time.time-startTime) <  8f) {
                     transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
                 }

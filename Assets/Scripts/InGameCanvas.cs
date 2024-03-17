@@ -36,8 +36,7 @@ public class InGameCanvas : MonoBehaviour
     {
         ReloadItems();
         
-        GameManager.Instance.RandomizeChooseItems();
-        LoadChooseItems();
+        GameManager.Instance.NewChooseItems();
     }
 
     // Update is called once per frame
@@ -80,7 +79,7 @@ public class InGameCanvas : MonoBehaviour
 
     public void CloseChooseItems()
     {
-        FindObjectOfType<InputRecorder>().TryLoadInputRecords();
+        //FindObjectOfType<InputRecorder>().TryLoadInputRecords();
         ScoreSystem.Instance.shopping = false;
         ChoosePopup.SetActive(false);
         choosingItem = false;
@@ -88,29 +87,36 @@ public class InGameCanvas : MonoBehaviour
 
     public void SwapItem(int swapID)
     {
-        if (selected != -1) {
-            if (selected < 2) {
-                GameManager.Instance.noteTypes[swapID] = GameManager.Instance.chooseNoteTypes[selected];
+        if (!ScoreSystem.Instance.songStarted) {
+            if (selected != -1) {
+                if (selected < 2) {
+                    //Swap chosen Note with Key
+                    GameManager.Instance.noteTypes[swapID] = GameManager.Instance.chooseNoteTypes[selected];
 
-                selected = -1;
-                ReloadItems();
-                
-                FindObjectOfType<InputRecorder>().TryLoadInputRecords();
-                ScoreSystem.Instance.shopping = false;
-                ChoosePopup.SetActive(false);
-                choosingItem = false;
+                    selected = -1;
+                    ReloadItems();
+                    
+                    //FindObjectOfType<InputRecorder>().TryLoadInputRecords();
+                    ScoreSystem.Instance.shopping = false;
+                    ChoosePopup.SetActive(false);
+                    choosingItem = false;
+                } else {
+                    //Swap Notes between 2 Keys
+                    if (swapID != selected-2) {
+                        NoteType tempNoteType = GameManager.Instance.noteTypes[selected-2];
+                        GameManager.Instance.noteTypes[selected-2] = GameManager.Instance.noteTypes[swapID];
+                        GameManager.Instance.noteTypes[swapID] = tempNoteType;
+                        
+                        selected = -1;
+                        ReloadItems();
+                        
+                        //FindObjectOfType<InputRecorder>().TryLoadInputRecords();
+                    }
+                }
             } else {
-                //Swap Notes
-                NoteType tempNoteType = GameManager.Instance.noteTypes[selected-2];
-                GameManager.Instance.noteTypes[selected-2] = GameManager.Instance.noteTypes[swapID];
-                GameManager.Instance.noteTypes[swapID] = tempNoteType;
-                
-                selected = -1;
-                ReloadItems();
+                selected = swapID+2;
+                ItemFrames[swapID].color = Color.white;
             }
-        } else {
-            selected = swapID+2;
-            ItemFrames[swapID].color = Color.white;
         }
     }
 }

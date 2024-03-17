@@ -2213,7 +2213,7 @@ MonoBehaviour:
   startTime: 9999999
   inputRecords: []
   recording: 0
-  inputFileIndex: 4
+  inputFileIndex: 1
   noteManager: {fileID: 0}
 --- !u!4 &714429139
 Transform:
@@ -4100,11 +4100,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 82783dfc5c570554987f47e88a495ba7, type: 3}
-  m_PlayOnAwake: 0
+  m_audioClip: {fileID: 8300000, guid: b7d4c249dcb6d524ba74d0b65c0520b0, type: 3}
+  m_PlayOnAwake: 1
   m_Volume: 0.5
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -4220,6 +4220,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 5d7ad9c2623290740b11e60324faa9ce, type: 3}
   - {fileID: 8300000, guid: 27563949619849d448fb5e721f44b69d, type: 3}
   - {fileID: 8300000, guid: 317404eb2bc4db64f9f8c34b22d19bd1, type: 3}
+  - {fileID: 8300000, guid: 317404eb2bc4db64f9f8c34b22d19bd1, type: 3}
+  - {fileID: 8300000, guid: 317404eb2bc4db64f9f8c34b22d19bd1, type: 3}
+  - {fileID: 8300000, guid: 317404eb2bc4db64f9f8c34b22d19bd1, type: 3}
+  - {fileID: 8300000, guid: 317404eb2bc4db64f9f8c34b22d19bd1, type: 3}
+  - {fileID: 8300000, guid: b7d4c249dcb6d524ba74d0b65c0520b0, type: 3}
+  currentClip: 9
 --- !u!1 &1285834727
 GameObject:
   m_ObjectHideFlags: 0

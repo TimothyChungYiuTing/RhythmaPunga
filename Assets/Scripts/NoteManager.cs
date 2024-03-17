@@ -24,12 +24,17 @@ public class NoteManager : MonoBehaviour
     }
     public void InstantiateNotes()
     {
+        StartCoroutine(Instantiation());
+    }
+
+    private IEnumerator Instantiation()
+    {
         foreach (InputRecord inputRecord in notes) {
-            GameObject noteInstantiated = Instantiate(NotePrefab, new Vector3(-50f, 20f, 6f), Quaternion.identity);
+            GameObject noteInstantiated = Instantiate(NotePrefab, new Vector3(-50f, 20f, 6f), Quaternion.identity, transform);
             NoteObject noteObject_inInstantiated = noteInstantiated.GetComponent<NoteObject>();
 
             noteObject_inInstantiated.hitTime = inputRecord.time + ScoreSystem.Instance.offset;  //Add offset to hitTIme
-            
+
             if (inputRecord.note == "W") {
                 noteObject_inInstantiated.noteDirection = NoteObject.NoteDirection.W;
                 if ((int)(noteObject_inInstantiated.hitTime+0.05f) / 12 % 2 == 0)
@@ -90,6 +95,9 @@ public class NoteManager : MonoBehaviour
                     };
                 }
             }
+            yield return null;
         }
+
+        ScoreSystem.Instance.StartSong();
     }
 }

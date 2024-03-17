@@ -48,13 +48,6 @@ public class InputRecorder : MonoBehaviour
         //TryLoadInputRecords();
     }
 
-    public void TryLoadInputRecords()
-    {
-        if (!recording) {
-            LoadInputRecords();
-        }
-    }
-
     private void Update()
     {
         if (recording) {
@@ -89,6 +82,12 @@ public class InputRecorder : MonoBehaviour
 
     public void LoadInputRecords()
     {
+        inputRecords.Clear();
+        noteManager.notes.Clear();
+        foreach (Transform child in noteManager.transform) {
+            Destroy(child.gameObject);
+        }
+
         if (File.Exists(filePath)) {
             string json = File.ReadAllText(filePath);
             InputData inputData = JsonUtility.FromJson<InputData>(json);
@@ -97,6 +96,12 @@ public class InputRecorder : MonoBehaviour
                 noteManager.notes.AddRange(inputData.songNotesArray);
             }
         }
-        noteManager.InstantiateNotes();
+        noteManager.InstantiateNotes(); //This calls a coroutine to make sure all notes are instantiated before starting the song
+    }
+    
+    public void Increment()
+    {
+        inputFileIndex++;
+        filePath = Application.dataPath + fileNames[inputFileIndex];
     }
 }

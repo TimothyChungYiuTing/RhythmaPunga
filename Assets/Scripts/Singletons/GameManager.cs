@@ -40,12 +40,16 @@ public class GameManager : Singleton<GameManager>
 
         //DEBUG ONLY
         if (Input.GetKeyDown(KeyCode.P)) {
-            RandomizeChooseItems();
-            FindObjectOfType<InGameCanvas>().LoadChooseItems();
+            NewChooseItems();
         }
     }
+    public void NewChooseItems()
+    {
+        RandomizeChooseItems();
+        FindObjectOfType<InGameCanvas>().LoadChooseItems();
+    }
 
-    public void RandomizeChooseItems()
+    private void RandomizeChooseItems()
     {
         chooseNoteTypes[0] = (NoteType)Random.Range(0,7);
         do {

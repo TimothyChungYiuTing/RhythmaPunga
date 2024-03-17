@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class ScoreSystem : Singleton<ScoreSystem>
 {
@@ -73,21 +74,33 @@ public class ScoreSystem : Singleton<ScoreSystem>
     //only begin the music once the game has started, only start the game when a putton is pressed
     void Update()
     {
-        if (!shopping && !songStarted && Input.GetKeyDown(KeyCode.Space)) {
+        if (!shopping && !songStarted && audioPlayer.currentClip == 9 && Input.GetKeyDown(KeyCode.Space)) {
+
             songStarted = true;
-            
-            audioPlayer.audioSource.clip = audioPlayer.songClips[inputRecorder.inputFileIndex];
-            audioPlayer.audioSource.Play();
-            inputRecorder.startTime = Time.time;
 
-            inGameCanvas.StartPopup.SetActive(false);
+            audioPlayer.currentClip = inputRecorder.inputFileIndex;
 
-            foreach (NoteObject noteObject in FindObjectsOfType<NoteObject>()) {
-                noteObject.startTime = inputRecorder.startTime;
+            if (!inputRecorder.recording) {
+                inputRecorder.LoadInputRecords(); //Load all Note data and Instantiate objects, then StartSong
+            }
+            else {
+                StartSong();
             }
         }
-        if (!audioPlayer.audioSource.isPlaying) {
+        if (songStarted && audioPlayer.currentClip != 9 && !audioPlayer.audioSource.isPlaying) {
             songStarted = false;
+            FindObjectOfType<NoteManager>().StopAllCoroutines();
+            
+            audioPlayer.currentClip = 9;
+            audioPlayer.audioSource.clip = audioPlayer.songClips[9];
+            audioPlayer.audioSource.loop = true;
+            audioPlayer.audioSource.Play();
+
+            if (inputRecorder.inputFileIndex < 4) {
+                inGameCanvas.StartPopup.SetActive(true);
+                GameManager.Instance.NewChooseItems();
+                inputRecorder.Increment();
+            }
         }
 
         //end of game, show results screen
@@ -121,6 +134,20 @@ public class ScoreSystem : Singleton<ScoreSystem>
             finalScoreText.text = currentScore.ToString();
         }
         */
+    }
+
+    public void StartSong()
+    {
+        audioPlayer.audioSource.clip = audioPlayer.songClips[inputRecorder.inputFileIndex];
+        audioPlayer.audioSource.loop = false;
+        audioPlayer.audioSource.Play();
+        inputRecorder.startTime = Time.time;
+
+        inGameCanvas.StartPopup.SetActive(false);
+
+        foreach (NoteObject noteObject in FindObjectsOfType<NoteObject>()) {
+            noteObject.startTime = inputRecorder.startTime;
+        }
     }
 
     //when the player hits a note, they recieve points, if they miss they recieve nothing

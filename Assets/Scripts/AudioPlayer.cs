@@ -6,6 +6,7 @@ public class AudioPlayer : MonoBehaviour
 {
     [HideInInspector] public AudioSource audioSource;
     public List<AudioClip> songClips;
+    public int currentClip;
 
     // Start is called before the first frame update
     void Start()
