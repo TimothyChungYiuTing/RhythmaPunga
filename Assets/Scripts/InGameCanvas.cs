@@ -32,6 +32,42 @@ public class InGameCanvas : MonoBehaviour
 
     public bool choosingItem = false;
 
+    private float hoverTime = 99999f;
+    private bool hovering = false;
+    private NoteType hoveringNoteType = NoteType.Normal;
+
+    [Header("Item Info")]
+    public GameObject ItemInfo;
+    public TextMeshProUGUI Text_ItemName;
+    public TextMeshProUGUI Text_ItemDesc;
+    private List<String> ItemNames = new()
+    {
+        "Dagger",
+        "Shuriken",
+        "Heal",
+        "Shield",
+        "Fireball",
+        "Zap",
+        "Poison"
+    };
+    private List<String> ItemDescs = new()
+    {
+        "The Safest Choice\nDeals 1x Damage",
+        "2x Speed\n2x Damage",
+        "+5 health per hit",
+        "Good / Perfect hits\ngives Combo Protection (Can stack)",
+        "Burns after dealing damage\n(Cannot stack)",
+        "Deals 3x Damage ONLY if\n Combo > 5",
+        "Poisons after dealing damage\n(Max Stack 5 times, Miss = Reset)"
+    };
+
+    [Header("Effects")]
+    public Image ShieldEffect;
+    public Image PoisonEffect;
+    public Image FireEffect;
+    public TextMeshProUGUI Text_ShieldNum;
+    public TextMeshProUGUI Text_PoisonNum;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +79,11 @@ public class InGameCanvas : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (hovering && Time.time - hoverTime > 0.3f) {
+            ShowAndUpdateItemInfo();
+        } else {
+            DisableItemInfo();
+        }
     }
 
     public void ReloadItems()
@@ -84,7 +124,7 @@ public class InGameCanvas : MonoBehaviour
         ScoreSystem.Instance.shopping = false;
         ChoosePopup.SetActive(false);
         choosingItem = false;
-        ScoreSystem.Instance.playerHealth = (int)Mathf.Clamp(ScoreSystem.Instance.playerHealth + ScoreSystem.Instance.playerMaxHealth * 0.5f, 0f, ScoreSystem.Instance.playerMaxHealth);
+        ScoreSystem.Instance.playerHealth = (int)Mathf.Clamp(ScoreSystem.Instance.playerHealth + ScoreSystem.Instance.playerMaxHealth * 0.3f, 0f, ScoreSystem.Instance.playerMaxHealth);
         UpdateHealth();
     }
 
@@ -129,5 +169,37 @@ public class InGameCanvas : MonoBehaviour
         Text_BossHealth.text = ScoreSystem.Instance.bossHealth.ToString() + " / " + ScoreSystem.Instance.bossMaxHealth;
         playerHealthBar.offsetMax = new Vector2(Mathf.Lerp(-297f, -3f, (float)ScoreSystem.Instance.playerHealth/ScoreSystem.Instance.playerMaxHealth), playerHealthBar.offsetMax.y);
         bossHealthBar.offsetMin = new Vector2(Mathf.Lerp(297f, 3f, (float)ScoreSystem.Instance.bossHealth/ScoreSystem.Instance.bossMaxHealth), bossHealthBar.offsetMin.y);
+    }
+
+    public void HoverChooseItem(int hoverID)
+    {
+        hoverTime = Time.time;
+        hovering = true;
+        hoveringNoteType = GameManager.Instance.chooseNoteTypes[hoverID];
+    }
+
+    public void HoverItem(int hoverID)
+    {
+        hoverTime = Time.time;
+        hovering = true;
+        hoveringNoteType = GameManager.Instance.noteTypes[hoverID];
+    }
+
+    public void ExitHover()
+    {
+        hovering = false;
+    }
+
+    private void ShowAndUpdateItemInfo()
+    {
+        ItemInfo.SetActive(true);
+        Text_ItemName.text = ItemNames[(int)hoveringNoteType];
+        Text_ItemDesc.text = ItemDescs[(int)hoveringNoteType];
+        ItemInfo.GetComponent<RectTransform>().anchoredPosition = new Vector2(Input.mousePosition.x, Mathf.Clamp(Input.mousePosition.y, 175f, 999999f));
+    }
+
+    private void DisableItemInfo()
+    {
+        ItemInfo.SetActive(false);
     }
 }

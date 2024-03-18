@@ -71,6 +71,14 @@ public class ScoreSystem : Singleton<ScoreSystem>
     public List<float> bossDamage;
     public List<int> bossMaxHealths;
 
+    [Header("Effects")]
+    public int comboProtection = 0;
+    public int poisonLevel = 0;
+    public float poisonTime = -999f; //Start of current poison effect
+    public float fireTime = -999f; //Start of current fire effect
+    public float lastPoisonTime = -999f; //last poison damage taken's time
+    public float lastFireTime = -999f; //last fire damage taken's time
+
     void Start() {
         audioPlayer = FindObjectOfType<AudioPlayer>();
         
@@ -114,6 +122,18 @@ public class ScoreSystem : Singleton<ScoreSystem>
             audioPlayer.audioSource.clip = audioPlayer.songClips[9];
             audioPlayer.audioSource.loop = true;
             audioPlayer.audioSource.Play();
+            
+            comboProtection = 0;
+            poisonLevel = 0;
+            poisonTime = -999f;
+            fireTime = -999f;
+            lastPoisonTime = -999f;
+            lastFireTime = -999f;
+            inGameCanvas.ShieldEffect.color = new Color(1f, 1f, 1f, 0.2f);
+            inGameCanvas.Text_ShieldNum.text = "";
+            inGameCanvas.PoisonEffect.color = new Color(1f, 1f, 1f, 0.2f);
+            inGameCanvas.Text_PoisonNum.text = "";
+            inGameCanvas.FireEffect.color = new Color(1f, 1f, 1f, 0.2f);
 
             if (inputRecorder.inputFileIndex < 4) {
                 playerHealth = (int)Mathf.Clamp(playerHealth + playerMaxHealth * 0.1f, 0f, playerMaxHealth);
@@ -167,6 +187,36 @@ public class ScoreSystem : Singleton<ScoreSystem>
             finalScoreText.text = currentScore.ToString();
         }
         */
+
+        //Effect management
+        if (Time.time - poisonTime > 1.5f) {
+            poisonLevel = 0;
+        }
+
+        if (Time.time - fireTime < 1.5f) {
+            Debug.LogError("FireTime");
+            if (Time.time - lastFireTime > 0.3f) {
+                Debug.LogError("LastFireTime");
+                lastFireTime = Time.time;
+                bossHealth -= 2;
+                inGameCanvas.UpdateHealth();
+            }
+        } else {
+            inGameCanvas.FireEffect.color = new Color(1f, 1f, 1f, 0.2f);
+        }
+
+        if (Time.time - poisonTime < 1.5f) {
+            Debug.LogError("PoisonTime");
+            if (Time.time - lastPoisonTime > 0.3f) {
+                Debug.LogError("LastPoisonTime");
+                lastPoisonTime = Time.time;
+                bossHealth -= poisonLevel;
+                inGameCanvas.UpdateHealth();
+            }
+        } else {
+            inGameCanvas.PoisonEffect.color = new Color(1f, 1f, 1f, 0.2f);
+            inGameCanvas.Text_PoisonNum.text = "";
+        }
     }
 
     private void OffenseMode()
@@ -197,6 +247,20 @@ public class ScoreSystem : Singleton<ScoreSystem>
         goodHits = 0;
         perfectHits = 0;
         missedHits = 0;
+
+        //Reset Effects
+        comboProtection = 0;
+        poisonLevel = 0;
+        poisonTime = -999f;
+        fireTime = -999f;
+        lastPoisonTime = -999f;
+        lastFireTime = -999f;
+        inGameCanvas.ShieldEffect.color = new Color(1f, 1f, 1f, 0.2f);
+        inGameCanvas.Text_ShieldNum.text = "";
+        inGameCanvas.PoisonEffect.color = new Color(1f, 1f, 1f, 0.2f);
+        inGameCanvas.Text_PoisonNum.text = "";
+        inGameCanvas.FireEffect.color = new Color(1f, 1f, 1f, 0.2f);
+        
         foreach (NoteObject noteObject in FindObjectsOfType<NoteObject>()) {
             noteObject.startTime = inputRecorder.startTime;
             totalNotes++;
@@ -247,11 +311,15 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     break;
                 case NoteType.Heal:
                     playerHealth += 5;
+                    if (playerHealth > 1000)
+                        playerHealth = 1000;
                     break;
                 case NoteType.Shield:
                     break;
                 case NoteType.Fire:
                     bossHealth -= (int)(normalNote * currentMult); //Burn 5 times, every 0.3 second -2 health
+                    inGameCanvas.FireEffect.color = Color.white;
+                    fireTime = Time.time;
                     break;
                 case NoteType.Zap:
                     if (combo >= 5)
@@ -259,6 +327,11 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     break;
                 case NoteType.Poison:
                     bossHealth -= (int)(normalNote * currentMult); //Poison up to 5 stacks, every 0.3 second -1 health, poison 5 times
+                    if (poisonLevel < 5)
+                        poisonLevel++;
+                    inGameCanvas.PoisonEffect.color = Color.white;
+                    inGameCanvas.Text_PoisonNum.text = poisonLevel.ToString();
+                    poisonTime = Time.time;
                     break;
             }
         }
@@ -283,11 +356,18 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     break;
                 case NoteType.Heal:
                     playerHealth += 5;
+                    if (playerHealth > 1000)
+                        playerHealth = 1000;
                     break;
                 case NoteType.Shield:
+                    comboProtection++;
+                    inGameCanvas.ShieldEffect.color = Color.white;
+                    inGameCanvas.Text_ShieldNum.text = comboProtection.ToString();
                     break;
                 case NoteType.Fire:
                     bossHealth -= (int)(goodNote * currentMult);
+                    inGameCanvas.FireEffect.color = Color.white;
+                    fireTime = Time.time;
                     break;
                 case NoteType.Zap:
                     if (combo >= 5)
@@ -295,6 +375,11 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     break;
                 case NoteType.Poison:
                     bossHealth -= (int)(goodNote * currentMult);
+                    if (poisonLevel < 5)
+                        poisonLevel++;
+                    inGameCanvas.PoisonEffect.color = Color.white;
+                    inGameCanvas.Text_PoisonNum.text = poisonLevel.ToString();
+                    poisonTime = Time.time;
                     break;
             }
         }
@@ -319,11 +404,18 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     break;
                 case NoteType.Heal:
                     playerHealth += 5;
+                    if (playerHealth > 1000)
+                        playerHealth = 1000;
                     break;
                 case NoteType.Shield:
+                    comboProtection++;
+                    inGameCanvas.ShieldEffect.color = Color.white;
+                    inGameCanvas.Text_ShieldNum.text = comboProtection.ToString();
                     break;
                 case NoteType.Fire:
                     bossHealth -= (int)(perfectNote * currentMult);
+                    inGameCanvas.FireEffect.color = Color.white;
+                    fireTime = Time.time;
                     break;
                 case NoteType.Zap:
                     if (combo >= 5)
@@ -331,6 +423,11 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     break;
                 case NoteType.Poison:
                     bossHealth -= (int)(perfectNote * currentMult);
+                    if (poisonLevel < 5)
+                        poisonLevel++;
+                    inGameCanvas.PoisonEffect.color = Color.white;
+                    inGameCanvas.Text_PoisonNum.text = poisonLevel.ToString();
+                    poisonTime = Time.time;
                     break;
             }
         }
@@ -344,13 +441,28 @@ public class ScoreSystem : Singleton<ScoreSystem>
     
         //Clear multiplier
         currentMult = 1;
-        combo = 0;
+        if (comboProtection > 0) {
+            comboProtection--;
+            inGameCanvas.Text_ShieldNum.text = comboProtection.ToString();
+        }
+        else {
+            combo = 0;
+            //update combo UI text
+            Text_Combo.text = "";
+        }
 
-        //update combo UI text
-        Text_Combo.text = "";
+        if (comboProtection <= 0) {
+            inGameCanvas.ShieldEffect.color = new Color(1f, 1f, 1f, 0.2f);
+            inGameCanvas.Text_ShieldNum.text = "";
+        }
 
         if ((int)noteType > 6)
             playerHealth -= (int)(bossDamage[inputRecorder.inputFileIndex-1] * missHurt);
+        
+        if (noteType == NoteType.Poison) {
+            poisonTime = -999f;
+            poisonLevel = 0;
+        }
 
         inGameCanvas.UpdateHealth();
     }

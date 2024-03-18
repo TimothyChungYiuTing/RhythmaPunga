@@ -126,7 +126,7 @@ public class NoteObject : MonoBehaviour
                 }
                 break;
             case NoteType.Shuriken:
-                moveSpeed = 15f;
+                moveSpeed = 16f;
                 if (hitTime - (Time.time-startTime) <  2f) {
                     transform.position = targetPositon - moveDirectionRotation * ((hitTime - (Time.time-startTime)) * Vector3.left * moveSpeed);
                     transform.localRotation = Quaternion.Euler(0f, 0f, (hitTime - (Time.time-startTime)) * (int)noteDirection * 90f);
