@@ -474,6 +474,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9024c46b069ad54bb112b97717ddbb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteTypes: 
+  chooseNoteTypes: 
+  otherItemsID: 
 --- !u!4 &57072574
 Transform:
   m_ObjectHideFlags: 0
@@ -903,6 +906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notes: []
+  inputRecorder: {fileID: 1989726210}
   NotePrefab: {fileID: 4973625933730666123, guid: f21bc63b8d817cc44b230816605684b7, type: 3}
 --- !u!4 &735395471
 Transform:
@@ -1289,28 +1293,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc3bdfaa6722fb46995d371f6d22c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playMusic: 0
+  mode: 0
+  globalLight: {fileID: 0}
+  heartLight: {fileID: 0}
   currentScore: 0
   normalNote: 100
   goodNote: 150
   perfectNote: 200
-  currentMiltiplier: 0
-  multiplierTracker: 0
-  multiplierThreshold: 
+  normalHurt: 2
+  goodHurt: 1
+  missHurt: 10
+  currentMult: 0
+  combo: 0
   totalNotes: 0
   normalHits: 0
   goodHits: 0
   perfectHits: 0
   missedHits: 0
-  resultsScreen: {fileID: 0}
-  percentHitText: {fileID: 0}
-  normalNotesText: {fileID: 0}
-  goodNotesText: {fileID: 0}
-  perfectNotesText: {fileID: 0}
-  missedNotesText: {fileID: 0}
-  rankText: {fileID: 0}
-  finalScoreText: {fileID: 0}
+  Text_Combo: {fileID: 0}
+  inputRecorder: {fileID: 0}
+  audioPlayer: {fileID: 0}
+  shopping: 0
+  songStarted: 0
+  inGameCanvas: {fileID: 0}
   offset: 0
+  playerHealth: 0
+  bossHealth: 0
+  playerMaxHealth: 0
+  bossMaxHealth: 0
+  bossDamage: []
+  bossMaxHealths: 
+  comboProtection: 0
+  poisonLevel: 0
+  poisonTime: -999
+  fireTime: -999
+  lastPoisonTime: -999
+  lastFireTime: -999
 --- !u!4 &1477054132
 Transform:
   m_ObjectHideFlags: 0
@@ -1534,7 +1552,7 @@ MonoBehaviour:
   startTime: 0
   inputRecords: []
   recording: 1
-  inputFileIndex: 0
+  inputFileIndex: 8
   noteManager: {fileID: 735395470}
 --- !u!4 &1989726211
 Transform:
@@ -1709,6 +1727,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
+  songClips: []
+  currentClip: 0
 --- !u!82 &2129604608
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1719,7 +1739,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 82783dfc5c570554987f47e88a495ba7, type: 3}
+  m_audioClip: {fileID: 8300000, guid: d589929a6f970b44dba39c8d0980610c, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.5
   m_Pitch: 1
