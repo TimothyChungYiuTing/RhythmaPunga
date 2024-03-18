@@ -13,13 +13,12 @@ public class InGameCanvas : MonoBehaviour
     public int selected = -1;
     public GameObject StartPopup;
     public TextMeshProUGUI Text_BossName;
-    private List<String> bossNames = new()
-    {
-        "Sloth",
-        "Greed",
-        "Gluttony",
-        "Wrath"
-    };
+    public TextMeshProUGUI Text_Boss;
+    public TextMeshProUGUI Text_PlayerHealth;
+    public TextMeshProUGUI Text_BossHealth;
+    public SpriteRenderer boss_SR;
+    public List<String> bossNames;
+    public List<Sprite> bossSprites;
 
     public GameObject ChoosePopup;
     public TextMeshProUGUI Text_ChooseOne;
@@ -83,6 +82,8 @@ public class InGameCanvas : MonoBehaviour
         ScoreSystem.Instance.shopping = false;
         ChoosePopup.SetActive(false);
         choosingItem = false;
+        ScoreSystem.Instance.playerHealth = (int)Mathf.Clamp(ScoreSystem.Instance.playerHealth + ScoreSystem.Instance.playerMaxHealth * 0.5f, 0f, ScoreSystem.Instance.playerMaxHealth);
+        UpdateHealth();
     }
 
     public void SwapItem(int swapID)
@@ -118,5 +119,11 @@ public class InGameCanvas : MonoBehaviour
                 ItemFrames[swapID].color = Color.white;
             }
         }
+    }
+
+    public void UpdateHealth()
+    {
+        Text_PlayerHealth.text = ScoreSystem.Instance.playerHealth.ToString() + " / " + ScoreSystem.Instance.playerMaxHealth;
+        Text_BossHealth.text = ScoreSystem.Instance.bossHealth.ToString() + " / " + ScoreSystem.Instance.bossMaxHealth;
     }
 }

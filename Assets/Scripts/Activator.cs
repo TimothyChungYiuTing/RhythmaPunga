@@ -23,5 +23,11 @@ public class Activator : MonoBehaviour
         if (Input.GetKeyUp(keyCode)) {
             spriteRenderer.color = new Color(1f, 1f, 1f, 1f);
         }
+
+        if (ScoreSystem.Instance.mode == Mode.Defense) {
+            spriteRenderer.sprite = DefenseSprite;
+        } else {
+            spriteRenderer.sprite = OffenseSprite;
+        }
     }
 }

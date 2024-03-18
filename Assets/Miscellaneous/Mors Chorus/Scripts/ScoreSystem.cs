@@ -6,26 +6,27 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
+public enum Mode {Defense, Offense}
 public class ScoreSystem : Singleton<ScoreSystem>
 {
-    [Header("Flags")]
-    public bool playMusic;
+    public Mode mode;
 
     [Header("Score")]
     public int currentScore;
-    public int normalNote = 100;
-    public int goodNote = 150;
-    public int perfectNote = 200;
+    public int normalNote = 5;
+    public int goodNote = 7;
+    public int perfectNote = 10;
+
+    
+    public int normalHurt = 2;
+    public int goodHurt = 1;
+    public int missHurt = 10;
 
 
     [Header("Multiplier")]
-    public int currentMiltiplier;
-    public int multiplierTracker;
-    public int[] multiplierThreshold;
+    public float currentMult;
+    public int combo;
 
-    [Header("Text")]
-    //public TMP_Text scoreText;
-    //public TMP_Text multiplierText;
 
     [Header("Results")]
     public float totalNotes;
@@ -33,7 +34,8 @@ public class ScoreSystem : Singleton<ScoreSystem>
     public float goodHits;
     public float perfectHits;
     public float missedHits;
-
+    
+    /*
     public GameObject resultsScreen;
     public TMP_Text percentHitText;
 
@@ -44,6 +46,9 @@ public class ScoreSystem : Singleton<ScoreSystem>
 
     public TMP_Text rankText;
     public TMP_Text finalScoreText;
+    */
+
+    public TextMeshProUGUI Text_Combo;
 
     public InputRecorder inputRecorder;
 
@@ -58,24 +63,37 @@ public class ScoreSystem : Singleton<ScoreSystem>
     [Header("Calibration Sync")]
     public float offset = 0f;  //Calibration syncing, added onto hitTime
 
+    [Header("Health")]
+    public int playerHealth;
+    public int bossHealth;
+    public int playerMaxHealth;
+    public int bossMaxHealth;
+    public List<float> bossDamage;
+    public List<int> bossMaxHealths;
+
     void Start() {
         audioPlayer = FindObjectOfType<AudioPlayer>();
+        
+        bossHealth = bossMaxHealths[0];
+        bossMaxHealth = bossMaxHealths[0];
+        inGameCanvas.UpdateHealth();
 
         //display the score as 0 from the beginning
             //scoreText.text = "Score: 0";
         
         //start multiplier at 1 and tracker at 0
-        currentMiltiplier = 1;
-        multiplierTracker = 0;
+        currentMult = 1f;
+        combo = 0;
         
         //count the total number of notes in the level
-        totalNotes = FindObjectsOfType <NoteObject>().Length; }
+            //totalNotes = FindObjectsOfType <NoteObject>().Length;
+    }
 
     //only begin the music once the game has started, only start the game when a putton is pressed
     void Update()
     {
         if (!shopping && !songStarted && audioPlayer.currentClip == 9 && Input.GetKeyDown(KeyCode.Space)) {
-
+            //Press Space to Load and Start Song
             songStarted = true;
 
             audioPlayer.currentClip = inputRecorder.inputFileIndex;
@@ -84,10 +102,11 @@ public class ScoreSystem : Singleton<ScoreSystem>
                 inputRecorder.LoadInputRecords(); //Load all Note data and Instantiate objects, then StartSong
             }
             else {
-                StartSong();
+                StartSong(); //Start recording
             }
         }
         if (songStarted && audioPlayer.currentClip != 9 && !audioPlayer.audioSource.isPlaying) {
+            //Song Ended
             songStarted = false;
             FindObjectOfType<NoteManager>().StopAllCoroutines();
             
@@ -97,12 +116,26 @@ public class ScoreSystem : Singleton<ScoreSystem>
             audioPlayer.audioSource.Play();
 
             if (inputRecorder.inputFileIndex < 4) {
+                playerHealth = (int)Mathf.Clamp(playerHealth + playerMaxHealth * 0.1f, 0f, playerMaxHealth);
+                bossHealth = bossMaxHealths[inputRecorder.inputFileIndex];
+                bossMaxHealth = bossMaxHealths[inputRecorder.inputFileIndex];
+                inGameCanvas.UpdateHealth();
+
                 inGameCanvas.StartPopup.SetActive(true);
+                inGameCanvas.Text_BossName.text = inGameCanvas.bossNames[inputRecorder.inputFileIndex];
+                inGameCanvas.Text_Boss.text = inGameCanvas.bossNames[inputRecorder.inputFileIndex];
+                inGameCanvas.boss_SR.sprite = inGameCanvas.bossSprites[inputRecorder.inputFileIndex];
                 GameManager.Instance.NewChooseItems();
                 inputRecorder.Increment();
             }
         }
-
+        if (songStarted) {
+            if (Time.time - inputRecorder.startTime <= 12f || (int)(Time.time - inputRecorder.startTime) / 12 % 2 == 1)
+                DefenseMode();
+            else
+                OffenseMode();
+        }
+        
         //end of game, show results screen
 
         //Deactivated by Timothy for now
@@ -136,6 +169,16 @@ public class ScoreSystem : Singleton<ScoreSystem>
         */
     }
 
+    private void OffenseMode()
+    {
+        mode = Mode.Offense;
+    }
+
+    private void DefenseMode()
+    {
+        mode = Mode.Defense;
+    }
+
     public void StartSong()
     {
         audioPlayer.audioSource.clip = audioPlayer.songClips[inputRecorder.inputFileIndex];
@@ -145,8 +188,18 @@ public class ScoreSystem : Singleton<ScoreSystem>
 
         inGameCanvas.StartPopup.SetActive(false);
 
+        mode = Mode.Defense;
+
+        //Reset Song Data
+        combo = 0;
+        totalNotes = 0;
+        normalHits = 0;
+        goodHits = 0;
+        perfectHits = 0;
+        missedHits = 0;
         foreach (NoteObject noteObject in FindObjectsOfType<NoteObject>()) {
             noteObject.startTime = inputRecorder.startTime;
+            totalNotes++;
         }
     }
 
@@ -156,49 +209,149 @@ public class ScoreSystem : Singleton<ScoreSystem>
         Debug.Log("Note Hit");
 
         //track multiplier
-        if (currentMiltiplier - 1 < multiplierThreshold.Length) { 
-            multiplierTracker ++;
-            if (multiplierThreshold[currentMiltiplier - 1] <= multiplierTracker) {
-                multiplierTracker = 0;
-                currentMiltiplier ++;
+        combo++;
+        currentMult += 0.1f;
+        if (currentMult > 1.5f) {
+            currentMult = 1f;
+        }
+
+        //update combo UI text
+        if (combo >= 5) {
+            Text_Combo.text = combo.ToString();
+            Text_Combo.transform.localScale = Vector3.one;
+            Text_Combo.color = Color.gray;
+        }
+        if (combo >= 20) {
+            Text_Combo.transform.localScale = Vector3.one * 1.2f;
+            Text_Combo.color = Color.yellow;
+        }
+        if (combo >= 50) {
+            Text_Combo.transform.localScale = Vector3.one * 1.3f;
+            Text_Combo.color = Color.cyan;
+        }
+    }
+
+    public void NormalHit(NoteType noteType)
+    {
+        currentScore += (int)(normalNote * currentMult);
+        normalHits++;
+        NoteHit();
+
+        if ((int)noteType < 7) {
+            switch (noteType) {
+                case NoteType.Normal:
+                    bossHealth -= (int)(normalNote * currentMult);
+                    break;
+                case NoteType.Shuriken:
+                    bossHealth -= (int)(normalNote * currentMult * 2f);
+                    break;
+                case NoteType.Heal:
+                    playerHealth += 5;
+                    break;
+                case NoteType.Shield:
+                    break;
+                case NoteType.Fire:
+                    bossHealth -= (int)(normalNote * currentMult); //Burn 5 times, every 0.3 second -2 health
+                    break;
+                case NoteType.Zap:
+                    if (combo >= 20)
+                        bossHealth -= (int)(normalNote * currentMult * 3f); //If Combo > 20, x3 damage
+                    break;
+                case NoteType.Poison:
+                    bossHealth -= (int)(normalNote * currentMult); //Poison up to 5 stacks, every 0.3 second -1 health, poison 5 times
+                    break;
+            }
+        }
+        else
+            playerHealth -= (int)(bossDamage[inputRecorder.inputFileIndex-1] * normalHurt);
+        
+        inGameCanvas.UpdateHealth();
+    }
+    public void GoodHit(NoteType noteType)
+    {
+        currentScore += (int)(goodNote * currentMult);
+        goodHits++;
+        NoteHit();
+
+        if ((int)noteType < 7) {
+            switch (noteType) {
+                case NoteType.Normal:
+                    bossHealth -= (int)(goodNote * currentMult);
+                    break;
+                case NoteType.Shuriken:
+                    bossHealth -= (int)(goodNote * currentMult * 2f);
+                    break;
+                case NoteType.Heal:
+                    playerHealth += 5;
+                    break;
+                case NoteType.Shield:
+                    break;
+                case NoteType.Fire:
+                    bossHealth -= (int)(goodNote * currentMult);
+                    break;
+                case NoteType.Zap:
+                    if (combo >= 20)
+                        bossHealth -= (int)(goodNote * currentMult * 3f); //If Combo > 20, x3 damage
+                    break;
+                case NoteType.Poison:
+                    bossHealth -= (int)(goodNote * currentMult);
+                    break;
+            }
+        }
+        else
+            playerHealth -= (int)(bossDamage[inputRecorder.inputFileIndex-1] * goodHurt);
+        
+        inGameCanvas.UpdateHealth();
+    }
+    public void PerfectHit(NoteType noteType)
+    {
+        currentScore += (int)(perfectNote * currentMult);
+        perfectHits++;
+        NoteHit();
+
+        if ((int)noteType < 7) {
+            switch (noteType) {
+                case NoteType.Normal:
+                    bossHealth -= (int)(perfectNote * currentMult);
+                    break;
+                case NoteType.Shuriken:
+                    bossHealth -= (int)(perfectNote * currentMult * 2f);
+                    break;
+                case NoteType.Heal:
+                    playerHealth += 5;
+                    break;
+                case NoteType.Shield:
+                    break;
+                case NoteType.Fire:
+                    bossHealth -= (int)(perfectNote * currentMult);
+                    break;
+                case NoteType.Zap:
+                    if (combo >= 20)
+                        bossHealth -= (int)(perfectNote * currentMult * 3f); //If Combo > 20, x3 damage
+                    break;
+                case NoteType.Poison:
+                    bossHealth -= (int)(perfectNote * currentMult);
+                    break;
             }
         }
 
-        //update multiplier UI text
-                        //multiplierText.text = "Multiplier: x" + currentMiltiplier;
-        //update score UI text
-                        //scoreText.text = "Score: " + currentScore;
+        inGameCanvas.UpdateHealth();
     }
 
-    public void NormalHit()
+    public void NoteMissed(NoteType noteType)
     {
-        currentScore += normalNote * currentMiltiplier;
-        normalHits++;
-        NoteHit();
-    }
-    public void GoodHit()
-    {
-        currentScore += goodNote * currentMiltiplier;
-        goodHits++;
-        NoteHit();
-    }
-    public void PerfectHit()
-    {
-        currentScore += perfectNote * currentMiltiplier;
-        perfectHits++;
-        NoteHit();
-    }
-
-    public void NoteMissed()
-    {
-        Debug.Log("Note Missed");
         missedHits++;
     
-        //multiplier nonsense
-        currentMiltiplier = 1;
-        multiplierTracker = 0;
+        //Clear multiplier
+        currentMult = 1;
+        combo = 0;
 
-        //update multiplier UI text
-                        //multiplierText.text = "Multiplier: x" + currentMiltiplier;
+        //update combo UI text
+        Text_Combo.text = "";
+
+        if ((int)noteType > 6)
+            playerHealth -= (int)(bossDamage[inputRecorder.inputFileIndex-1] * missHurt);
+
+        inGameCanvas.UpdateHealth();
     }
 }

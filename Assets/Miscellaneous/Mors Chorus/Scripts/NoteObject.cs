@@ -78,22 +78,22 @@ public class NoteObject : MonoBehaviour
 
                 //TODO: Change to Distance check
                 //TODO: Prioritize closest note and only remove that note
-                if (Vector2.Distance(transform.position, collidedActivator.position) > 0.6) {
+                if (Vector2.Distance(transform.position, collidedActivator.position) > 0.65) {
                     Debug.Log("Normal Hit");
                     Instantiate(normalEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
-                    ScoreSystem.Instance.NormalHit();
+                    ScoreSystem.Instance.NormalHit(noteType);
                     Destroy(gameObject);
                 }
                 else if (Vector2.Distance(transform.position, collidedActivator.position) > 0.4) {
                     Debug.Log("Good Hit!");
                     Instantiate(goodEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
-                    ScoreSystem.Instance.GoodHit();
+                    ScoreSystem.Instance.GoodHit(noteType);
                     Destroy(gameObject);
                 }
                 else {
                     Debug.Log("Perfect Hit!!");
                     Instantiate(perfectEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
-                    ScoreSystem.Instance.PerfectHit();
+                    ScoreSystem.Instance.PerfectHit(noteType);
                     Destroy(gameObject);
                 }
             }
@@ -209,10 +209,10 @@ public class NoteObject : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("Triggered");
+        //Debug.Log("Triggered");
         if (other.tag == "Activator") {
             collidedActivator = other.transform;
-            Debug.Log("Active");
+            //Debug.Log("Active");
             canBePressed = true;
         }
     }
@@ -224,7 +224,9 @@ public class NoteObject : MonoBehaviour
             if (!obtained) {
                 Debug.Log ("Note Missed");
                 Instantiate(missEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10, 10))), effectsHolder.transform);
-                ScoreSystem.Instance.NoteMissed();
+                ScoreSystem.Instance.NoteMissed(noteType);
+
+                obtained = true;
             }
 
             Destroy(gameObject);

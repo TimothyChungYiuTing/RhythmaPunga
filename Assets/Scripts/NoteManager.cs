@@ -37,7 +37,7 @@ public class NoteManager : MonoBehaviour
 
             if (inputRecord.note == "W") {
                 noteObject_inInstantiated.noteDirection = NoteObject.NoteDirection.W;
-                if ((int)(noteObject_inInstantiated.hitTime+0.05f) / 12 % 2 == 0)
+                if ((int)(noteObject_inInstantiated.hitTime+0.02f) / 12 % 2 == 0)
                     noteObject_inInstantiated.noteType = GameManager.Instance.noteTypes[1];
                 else {
                     noteObject_inInstantiated.noteType = inputRecorder.inputFileIndex switch
@@ -52,7 +52,7 @@ public class NoteManager : MonoBehaviour
             }
             else if (inputRecord.note == "A") {
                 noteObject_inInstantiated.noteDirection = NoteObject.NoteDirection.A;
-                if ((int)(noteObject_inInstantiated.hitTime+0.05f) / 12 % 2 == 0)
+                if ((int)(noteObject_inInstantiated.hitTime+0.02f) / 12 % 2 == 0)
                     noteObject_inInstantiated.noteType = GameManager.Instance.noteTypes[2];
                 else {
                     noteObject_inInstantiated.noteType = inputRecorder.inputFileIndex switch
@@ -67,7 +67,7 @@ public class NoteManager : MonoBehaviour
             }
             else if (inputRecord.note == "S") {
                 noteObject_inInstantiated.noteDirection = NoteObject.NoteDirection.S;
-                if ((int)(noteObject_inInstantiated.hitTime+0.05f) / 12 % 2 == 0)
+                if ((int)(noteObject_inInstantiated.hitTime+0.02f) / 12 % 2 == 0)
                     noteObject_inInstantiated.noteType = GameManager.Instance.noteTypes[3];
                 else {
                     noteObject_inInstantiated.noteType = inputRecorder.inputFileIndex switch
@@ -82,7 +82,7 @@ public class NoteManager : MonoBehaviour
             }
             else if (inputRecord.note == "D") {
                 noteObject_inInstantiated.noteDirection = NoteObject.NoteDirection.D;
-                if ((int)(noteObject_inInstantiated.hitTime+0.05f) / 12 % 2 == 0)
+                if ((int)(noteObject_inInstantiated.hitTime+0.02f) / 12 % 2 == 0)
                     noteObject_inInstantiated.noteType = GameManager.Instance.noteTypes[0];
                 else {
                     noteObject_inInstantiated.noteType = inputRecorder.inputFileIndex switch
