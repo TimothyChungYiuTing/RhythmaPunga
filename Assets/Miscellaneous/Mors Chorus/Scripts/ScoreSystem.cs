@@ -254,8 +254,8 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     bossHealth -= (int)(normalNote * currentMult); //Burn 5 times, every 0.3 second -2 health
                     break;
                 case NoteType.Zap:
-                    if (combo >= 20)
-                        bossHealth -= (int)(normalNote * currentMult * 3f); //If Combo > 20, x3 damage
+                    if (combo >= 5)
+                        bossHealth -= (int)(normalNote * currentMult * 3f); //If Combo > 5, x3 damage
                     break;
                 case NoteType.Poison:
                     bossHealth -= (int)(normalNote * currentMult); //Poison up to 5 stacks, every 0.3 second -1 health, poison 5 times
@@ -290,8 +290,8 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     bossHealth -= (int)(goodNote * currentMult);
                     break;
                 case NoteType.Zap:
-                    if (combo >= 20)
-                        bossHealth -= (int)(goodNote * currentMult * 3f); //If Combo > 20, x3 damage
+                    if (combo >= 5)
+                        bossHealth -= (int)(goodNote * currentMult * 3f); //If Combo > 5, x3 damage
                     break;
                 case NoteType.Poison:
                     bossHealth -= (int)(goodNote * currentMult);
@@ -326,8 +326,8 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     bossHealth -= (int)(perfectNote * currentMult);
                     break;
                 case NoteType.Zap:
-                    if (combo >= 20)
-                        bossHealth -= (int)(perfectNote * currentMult * 3f); //If Combo > 20, x3 damage
+                    if (combo >= 5)
+                        bossHealth -= (int)(perfectNote * currentMult * 3f); //If Combo > 5, x3 damage
                     break;
                 case NoteType.Poison:
                     bossHealth -= (int)(perfectNote * currentMult);

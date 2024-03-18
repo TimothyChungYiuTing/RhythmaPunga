@@ -16,6 +16,8 @@ public class InGameCanvas : MonoBehaviour
     public TextMeshProUGUI Text_Boss;
     public TextMeshProUGUI Text_PlayerHealth;
     public TextMeshProUGUI Text_BossHealth;
+    public RectTransform playerHealthBar; 
+    public RectTransform bossHealthBar; 
     public SpriteRenderer boss_SR;
     public List<String> bossNames;
     public List<Sprite> bossSprites;
@@ -125,5 +127,7 @@ public class InGameCanvas : MonoBehaviour
     {
         Text_PlayerHealth.text = ScoreSystem.Instance.playerHealth.ToString() + " / " + ScoreSystem.Instance.playerMaxHealth;
         Text_BossHealth.text = ScoreSystem.Instance.bossHealth.ToString() + " / " + ScoreSystem.Instance.bossMaxHealth;
+        playerHealthBar.offsetMax = new Vector2(Mathf.Lerp(-297f, -3f, (float)ScoreSystem.Instance.playerHealth/ScoreSystem.Instance.playerMaxHealth), playerHealthBar.offsetMax.y);
+        bossHealthBar.offsetMin = new Vector2(Mathf.Lerp(297f, 3f, (float)ScoreSystem.Instance.bossHealth/ScoreSystem.Instance.bossMaxHealth), bossHealthBar.offsetMin.y);
     }
 }
