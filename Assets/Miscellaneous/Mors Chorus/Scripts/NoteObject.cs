@@ -20,6 +20,7 @@ public class NoteObject : MonoBehaviour
     [Header("Flags")]
     public bool canBePressed;
     public bool obtained = false;
+    private bool projectileSpawned = false;
 
     [Header("Misc")]
     public KeyCode keyToPress;
@@ -30,11 +31,17 @@ public class NoteObject : MonoBehaviour
     public GameObject goodEffect;
     public GameObject perfectEffect;
 
-    public GameObject effectsHolder;
+    private GameObject effectsHolder;
+    
+    public GameObject projectile;
+    private GameObject projHolder;
 
     [Header("Calibration Sync")]
     public float startTime; //Reference to the start time of the scene, when the song starts playing
     private Transform collidedActivator = null;
+
+
+    private GameObject enemyProj = null;
 
     void Start()
     {
@@ -43,6 +50,7 @@ public class NoteObject : MonoBehaviour
         Setup();
 
         effectsHolder = FindObjectOfType<EffectsHolder>().gameObject;
+        projHolder = FindObjectOfType<ProjHolder>().gameObject;
 
         if (noteDirection == NoteDirection.W) {
             keyToPress = KeyCode.W;
@@ -71,6 +79,13 @@ public class NoteObject : MonoBehaviour
         //TODO: Change position according to NoteDirection and NoteType (arrive targetPositon at dedicated time)
         Positioning();
 
+        //Enemy spawn projectile effect
+        if (!projectileSpawned && (int)noteType > 6 && (hitTime - (Time.time-startTime) <  0.52f) && (hitTime - (Time.time-startTime) > 0f)) {
+            projectileSpawned = true;
+            enemyProj = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
+            enemyProj.GetComponent<Projectile>().noteType = noteType;
+        }
+
         if (Input.GetKeyDown (keyToPress)) {
             if (canBePressed) {
                 obtained = true;
@@ -82,18 +97,45 @@ public class NoteObject : MonoBehaviour
                     Debug.Log("Normal Hit");
                     Instantiate(normalEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
                     ScoreSystem.Instance.NormalHit(noteType);
+                    if ((int)noteType < 7) {
+                        GameObject proj = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
+                        proj.GetComponent<Projectile>().noteType = noteType;
+                    }
+                    else {
+                        //Block.SetActive(true);
+                    }
+                    if (enemyProj != null)
+                        Destroy(enemyProj);
                     Destroy(gameObject);
                 }
                 else if (Vector2.Distance(transform.position, collidedActivator.position) > 0.4) {
                     Debug.Log("Good Hit!");
                     Instantiate(goodEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
                     ScoreSystem.Instance.GoodHit(noteType);
+                    if ((int)noteType < 7) {
+                        GameObject proj = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
+                        proj.GetComponent<Projectile>().noteType = noteType;
+                    }
+                    else {
+                        //Block.SetActive(true);
+                    }
+                    if (enemyProj != null)
+                        Destroy(enemyProj);
                     Destroy(gameObject);
                 }
                 else {
                     Debug.Log("Perfect Hit!!");
                     Instantiate(perfectEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
                     ScoreSystem.Instance.PerfectHit(noteType);
+                    if ((int)noteType < 7) {
+                        GameObject proj = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
+                        proj.GetComponent<Projectile>().noteType = noteType;
+                    }
+                    else {
+                        //Block.SetActive(true);
+                    }
+                    if (enemyProj != null)
+                        Destroy(enemyProj);
                     Destroy(gameObject);
                 }
             }

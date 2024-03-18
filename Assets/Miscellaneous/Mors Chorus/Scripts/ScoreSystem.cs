@@ -5,11 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using UnityEngine.Rendering.Universal;
 
 public enum Mode {Defense, Offense}
 public class ScoreSystem : Singleton<ScoreSystem>
 {
     public Mode mode;
+    public Light2D globalLight;
+    public Light2D heartLight;
 
     [Header("Score")]
     public int currentScore;
@@ -53,7 +56,7 @@ public class ScoreSystem : Singleton<ScoreSystem>
     public InputRecorder inputRecorder;
 
     [Header("AudioPlayer")]
-    private AudioPlayer audioPlayer;
+    public AudioPlayer audioPlayer;
 
     [Header("Song")]
     public bool shopping = false;
@@ -79,9 +82,7 @@ public class ScoreSystem : Singleton<ScoreSystem>
     public float lastPoisonTime = -999f; //last poison damage taken's time
     public float lastFireTime = -999f; //last fire damage taken's time
 
-    void Start() {
-        audioPlayer = FindObjectOfType<AudioPlayer>();
-        
+    void Start() {        
         bossHealth = bossMaxHealths[0];
         bossMaxHealth = bossMaxHealths[0];
         inGameCanvas.UpdateHealth();
@@ -187,7 +188,7 @@ public class ScoreSystem : Singleton<ScoreSystem>
             finalScoreText.text = currentScore.ToString();
         }
         */
-
+        
         //Effect management
         if (Time.time - poisonTime > 1.5f) {
             poisonLevel = 0;
@@ -222,11 +223,17 @@ public class ScoreSystem : Singleton<ScoreSystem>
     private void OffenseMode()
     {
         mode = Mode.Offense;
+        globalLight.color = new Color(1f, 1f, 1f, 1f);
+        globalLight.intensity = Mathf.Sin((Time.time - inputRecorder.startTime) * Mathf.PI / 2f)*0.1f + 0.8f;
+        heartLight.intensity = 0f;
     }
 
     private void DefenseMode()
     {
         mode = Mode.Defense;
+        globalLight.color = new Color(1f, 0.5f, 0.5f, 1f);
+        globalLight.intensity = 1f;
+        heartLight.intensity = Mathf.Sin((Time.time - inputRecorder.startTime) * Mathf.PI / 2f)*0.1f + 0.5f;
     }
 
     public void StartSong()

@@ -123,6 +123,9 @@ MonoBehaviour:
   goodEffect: {fileID: 4869972277845915043, guid: 2d5e2f1f3c45b454ea67251ccf3ae274, type: 3}
   perfectEffect: {fileID: 416883394473348823, guid: 148525c9db86b214faed88e46e3fa635, type: 3}
   effectsHolder: {fileID: 0}
+  projectile: {fileID: 2458282794386899563, guid: 9cdfdf2c2bc3dea4aa74af3c8e09cd60, type: 3}
+  projHolder: {fileID: 0}
+  startTime: 0
 --- !u!61 &1951367202747001648
 BoxCollider2D:
   m_ObjectHideFlags: 0
