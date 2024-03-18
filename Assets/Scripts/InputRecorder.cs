@@ -35,6 +35,9 @@ public class InputRecorder : MonoBehaviour
         "/Resources/Song2Input.json",
         "/Resources/Song3Input.json",
         "/Resources/Song4Input.json",
+        "/Resources/Song5Input.json",
+        "/Resources/Song6Input.json",
+        "/Resources/Song7Input.json",
         "/Resources/Song8Input.json", // Calibration
     };
 

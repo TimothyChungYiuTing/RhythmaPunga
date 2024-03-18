@@ -14,6 +14,8 @@ public class ScoreSystem : Singleton<ScoreSystem>
     public Light2D globalLight;
     public Light2D heartLight;
 
+    public bool inGame;
+
     [Header("Score")]
     public int currentScore;
     public int normalNote = 5;
@@ -71,8 +73,8 @@ public class ScoreSystem : Singleton<ScoreSystem>
     public int bossHealth;
     public int playerMaxHealth;
     public int bossMaxHealth;
-    public List<float> bossDamage;
-    public List<int> bossMaxHealths;
+    private List<float> bossDamage = new() { 1.5f, 1f, 1f, 1f };
+    private List<int> bossMaxHealths = new() { 500, 600, 800, 1000 };
 
     [Header("Effects")]
     public int comboProtection = 0;
@@ -82,10 +84,10 @@ public class ScoreSystem : Singleton<ScoreSystem>
     public float lastPoisonTime = -999f; //last poison damage taken's time
     public float lastFireTime = -999f; //last fire damage taken's time
 
-    void Start() {        
+    void Start() {       
         bossHealth = bossMaxHealths[0];
         bossMaxHealth = bossMaxHealths[0];
-        inGameCanvas.UpdateHealth();
+        // inGameCanvas.UpdateHealth(); - - - - - - - add back in TODO
 
         //display the score as 0 from the beginning
             //scoreText.text = "Score: 0";
@@ -202,7 +204,7 @@ public class ScoreSystem : Singleton<ScoreSystem>
                 bossHealth -= 2;
                 inGameCanvas.UpdateHealth();
             }
-        } else {
+        } else if (inGame) {
             inGameCanvas.FireEffect.color = new Color(1f, 1f, 1f, 0.2f);
         }
 
@@ -214,7 +216,7 @@ public class ScoreSystem : Singleton<ScoreSystem>
                 bossHealth -= poisonLevel;
                 inGameCanvas.UpdateHealth();
             }
-        } else {
+        } else if (inGame) {
             inGameCanvas.PoisonEffect.color = new Color(1f, 1f, 1f, 0.2f);
             inGameCanvas.Text_PoisonNum.text = "";
         }
