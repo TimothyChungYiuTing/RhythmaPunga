@@ -4,22 +4,25 @@ using UnityEngine;
 
 public class CalibrationNotes : MonoBehaviour
 {
+    private float resetTime;
     private Vector3 startPos;
     public float speed;
 
     private void Start()
     {
+        resetTime = Time.time;
         startPos = transform.position;
     }
 
     void Update()
     {
-        transform.position += Time.deltaTime * Vector3.left * speed;
+        transform.position = startPos + (Time.time - resetTime) * Vector3.left * speed + (ScoreSystem.Instance.offset * Vector3.left * speed);
     }
 
     public void ResetPosition()
     {
+        resetTime = Time.time;
         transform.position = startPos;
-        transform.position += (ScoreSystem.Instance.offset * Vector3.left) * speed;
+        transform.position += (ScoreSystem.Instance.offset * Vector3.left * speed);
     }
 }

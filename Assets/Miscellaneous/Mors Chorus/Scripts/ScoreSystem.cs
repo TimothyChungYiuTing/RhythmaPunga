@@ -84,6 +84,8 @@ public class ScoreSystem : Singleton<ScoreSystem>
     public float lastPoisonTime = -999f; //last poison damage taken's time
     public float lastFireTime = -999f; //last fire damage taken's time
 
+    public GameObject projectile;
+
     void Start() {       
         bossHealth = bossMaxHealths[0];
         bossMaxHealth = bossMaxHealths[0];
@@ -139,7 +141,12 @@ public class ScoreSystem : Singleton<ScoreSystem>
             inGameCanvas.FireEffect.color = new Color(1f, 1f, 1f, 0.2f);
 
             if (inputRecorder.inputFileIndex < 4) {
+                //Heal 10%
                 playerHealth = (int)Mathf.Clamp(playerHealth + playerMaxHealth * 0.1f, 0f, playerMaxHealth);
+
+                GameObject proj = Instantiate(projectile, transform.position, Quaternion.identity); 
+                proj.GetComponent<Projectile>().noteType = NoteType.Heal;
+
                 bossHealth = bossMaxHealths[inputRecorder.inputFileIndex];
                 bossMaxHealth = bossMaxHealths[inputRecorder.inputFileIndex];
                 inGameCanvas.UpdateHealth();
@@ -201,6 +208,7 @@ public class ScoreSystem : Singleton<ScoreSystem>
             if (Time.time - lastFireTime > 0.3f) {
                 Debug.LogError("LastFireTime");
                 lastFireTime = Time.time;
+                FindObjectOfType<VFXManager>().ShakeBoss();
                 bossHealth -= 2;
                 inGameCanvas.UpdateHealth();
             }
@@ -213,6 +221,7 @@ public class ScoreSystem : Singleton<ScoreSystem>
             if (Time.time - lastPoisonTime > 0.3f) {
                 Debug.LogError("LastPoisonTime");
                 lastPoisonTime = Time.time;
+                FindObjectOfType<VFXManager>().ShakeBoss();
                 bossHealth -= poisonLevel;
                 inGameCanvas.UpdateHealth();
             }
@@ -331,8 +340,10 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     fireTime = Time.time;
                     break;
                 case NoteType.Zap:
-                    if (combo >= 5)
+                    if (combo >= 5) {
+                        FindObjectOfType<VFXManager>().ShakeBoss();
                         bossHealth -= (int)(normalNote * currentMult * 3f); //If Combo > 5, x3 damage
+                    }
                     break;
                 case NoteType.Poison:
                     bossHealth -= (int)(normalNote * currentMult); //Poison up to 5 stacks, every 0.3 second -1 health, poison 5 times
@@ -344,8 +355,9 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     break;
             }
         }
-        else
+        else {
             playerHealth -= (int)(bossDamage[inputRecorder.inputFileIndex-1] * normalHurt);
+        }
         
         inGameCanvas.UpdateHealth();
     }
@@ -379,8 +391,10 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     fireTime = Time.time;
                     break;
                 case NoteType.Zap:
-                    if (combo >= 5)
+                    if (combo >= 5) {
+                        FindObjectOfType<VFXManager>().ShakeBoss();
                         bossHealth -= (int)(goodNote * currentMult * 3f); //If Combo > 5, x3 damage
+                    }
                     break;
                 case NoteType.Poison:
                     bossHealth -= (int)(goodNote * currentMult);
@@ -392,8 +406,9 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     break;
             }
         }
-        else
+        else {
             playerHealth -= (int)(bossDamage[inputRecorder.inputFileIndex-1] * goodHurt);
+        }
         
         inGameCanvas.UpdateHealth();
     }
@@ -427,8 +442,10 @@ public class ScoreSystem : Singleton<ScoreSystem>
                     fireTime = Time.time;
                     break;
                 case NoteType.Zap:
-                    if (combo >= 5)
+                    if (combo >= 5) {
+                        FindObjectOfType<VFXManager>().ShakeBoss();
                         bossHealth -= (int)(perfectNote * currentMult * 3f); //If Combo > 5, x3 damage
+                    }
                     break;
                 case NoteType.Poison:
                     bossHealth -= (int)(perfectNote * currentMult);
@@ -465,8 +482,9 @@ public class ScoreSystem : Singleton<ScoreSystem>
             inGameCanvas.Text_ShieldNum.text = "";
         }
 
-        if ((int)noteType > 6)
+        if ((int)noteType > 6) {
             playerHealth -= (int)(bossDamage[inputRecorder.inputFileIndex-1] * missHurt);
+        }
         
         if (noteType == NoteType.Poison) {
             poisonTime = -999f;

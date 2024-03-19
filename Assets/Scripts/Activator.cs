@@ -19,9 +19,11 @@ public class Activator : MonoBehaviour
     {
         if (Input.GetKeyDown(keyCode)) {
             spriteRenderer.color = new Color(1f, 1f, 1f, 0.5f);
+            transform.localScale = Vector3.one * 0.8f;
         }
         if (Input.GetKeyUp(keyCode)) {
             spriteRenderer.color = new Color(1f, 1f, 1f, 1f);
+            transform.localScale = Vector3.one * 0.7f;
         }
 
         if (ScoreSystem.Instance.mode == Mode.Defense) {

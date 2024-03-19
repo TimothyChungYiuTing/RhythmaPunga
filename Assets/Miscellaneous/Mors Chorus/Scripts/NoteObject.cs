@@ -42,10 +42,13 @@ public class NoteObject : MonoBehaviour
 
 
     private GameObject enemyProj = null;
+    private VFXManager vFXManager;
 
     void Start()
     {
         startTime = FindObjectOfType<InputRecorder>().startTime;
+
+        vFXManager = FindObjectOfType<VFXManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         Setup();
 
@@ -97,11 +100,20 @@ public class NoteObject : MonoBehaviour
                     Debug.Log("Normal Hit");
                     Instantiate(normalEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
                     ScoreSystem.Instance.NormalHit(noteType);
+
+                    vFXManager.Lit_PlayBG();
                     if ((int)noteType < 7) {
                         GameObject proj = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
                         proj.GetComponent<Projectile>().noteType = noteType;
+                        if (noteType == NoteType.Shuriken) {
+                            GameObject proj2 = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
+                            proj2.GetComponent<Projectile>().noteType = noteType;
+                            GameObject proj3 = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
+                            proj3.GetComponent<Projectile>().noteType = noteType;
+                        }
                     }
                     else {
+                        vFXManager.Block();
                         //Block.SetActive(true);
                     }
                     if (enemyProj != null)
@@ -112,11 +124,20 @@ public class NoteObject : MonoBehaviour
                     Debug.Log("Good Hit!");
                     Instantiate(goodEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
                     ScoreSystem.Instance.GoodHit(noteType);
+
+                    vFXManager.Lit_PlayBG();
                     if ((int)noteType < 7) {
                         GameObject proj = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
                         proj.GetComponent<Projectile>().noteType = noteType;
+                        if (noteType == NoteType.Shuriken) {
+                            GameObject proj2 = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
+                            proj2.GetComponent<Projectile>().noteType = noteType;
+                            GameObject proj3 = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
+                            proj3.GetComponent<Projectile>().noteType = noteType;
+                        }
                     }
                     else {
+                        vFXManager.Block();
                         //Block.SetActive(true);
                     }
                     if (enemyProj != null)
@@ -127,11 +148,22 @@ public class NoteObject : MonoBehaviour
                     Debug.Log("Perfect Hit!!");
                     Instantiate(perfectEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
                     ScoreSystem.Instance.PerfectHit(noteType);
+
+                    vFXManager.Lit_PlayBG();
                     if ((int)noteType < 7) {
-                        GameObject proj = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
-                        proj.GetComponent<Projectile>().noteType = noteType;
+                        if (!(ScoreSystem.Instance.combo < 5 && noteType == NoteType.Zap)) {
+                            GameObject proj = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
+                            proj.GetComponent<Projectile>().noteType = noteType;
+                        }
+                        if (noteType == NoteType.Shuriken) {
+                            GameObject proj2 = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
+                            proj2.GetComponent<Projectile>().noteType = noteType;
+                            GameObject proj3 = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
+                            proj3.GetComponent<Projectile>().noteType = noteType;
+                        }
                     }
                     else {
+                        vFXManager.Block();
                         //Block.SetActive(true);
                     }
                     if (enemyProj != null)

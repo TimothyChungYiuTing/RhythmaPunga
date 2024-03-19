@@ -68,6 +68,8 @@ public class InGameCanvas : MonoBehaviour
     public TextMeshProUGUI Text_ShieldNum;
     public TextMeshProUGUI Text_PoisonNum;
 
+    public GameObject projectile;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -124,7 +126,11 @@ public class InGameCanvas : MonoBehaviour
         ScoreSystem.Instance.shopping = false;
         ChoosePopup.SetActive(false);
         choosingItem = false;
+
+        //Heal 30% HP
         ScoreSystem.Instance.playerHealth = (int)Mathf.Clamp(ScoreSystem.Instance.playerHealth + ScoreSystem.Instance.playerMaxHealth * 0.3f, 0f, ScoreSystem.Instance.playerMaxHealth);
+        GameObject proj = Instantiate(projectile, transform.position, Quaternion.identity); 
+        proj.GetComponent<Projectile>().noteType = NoteType.Heal;
         UpdateHealth();
     }
 
