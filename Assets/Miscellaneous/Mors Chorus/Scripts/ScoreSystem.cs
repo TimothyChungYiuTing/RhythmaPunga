@@ -83,12 +83,6 @@ public class ScoreSystem : MonoBehaviour
 
     public GameObject projectile;
 
-    [Header("Win / Lose Data")]
-    public GameObject IGC_Canvas;
-    public GameObject WLC_Canvas;
-    public GameObject loseScreen;
-    public GameObject winScreen;
-
     void Start() {       
         bossHealth = bossMaxHealths[0];
         bossMaxHealth = bossMaxHealths[0];
@@ -102,15 +96,9 @@ public class ScoreSystem : MonoBehaviour
         //start multiplier at 1 and tracker at 0
         currentMult = 1f;
         combo = 0;
-
+        
         //count the total number of notes in the level
-        //totalNotes = FindObjectsOfType <NoteObject>().Length;
-
-        //set the win / loose menus to false from the get-go
-        IGC_Canvas.SetActive(true);
-        WLC_Canvas.SetActive(false);
-        loseScreen.SetActive(false);
-        winScreen.SetActive(false);
+            //totalNotes = FindObjectsOfType <NoteObject>().Length;
     }
 
     //only begin the music once the game has started, only start the game when a putton is pressed
@@ -176,59 +164,41 @@ public class ScoreSystem : MonoBehaviour
             else
                 OffenseMode();
         }
+        
+        //end of game, show results screen
 
-        //lose game from time-out
-        if (!audioPlayer.audioSource.isPlaying && bossHealth > 0)
-        {
-            IGC_Canvas.SetActive(false);
-            WLC_Canvas.SetActive(true);
-            loseScreen.SetActive(true);
-            winScreen.SetActive(false);
+        //Deactivated by Timothy for now
+        /*
+        if (!audioPlayer.audioSource.isPlaying && !resultsScreen.activeInHierarchy) {
+            resultsScreen.SetActive (true);
+            //calculate hits
+            normalNotesText.text = "" + normalHits;
+            goodNotesText.text = goodHits.ToString();
+            perfectNotesText.text = perfectHits.ToString(); 
+            missedNotesText.text = "" + missedHits;
+            float totalHit = normalHits + goodHits + perfectHits;
+            float percentHit = (totalHit / totalNotes) * 100f;
+            //percent hit
+            percentHitText.text = percentHit.ToString ("F2") + "%";
+            //rank
+            rankText.text = "F";
+            if (percentHit > 30)
+                rankText.text = "E";
+            if (percentHit > 45)
+                rankText.text = "D";
+            if (percentHit > 60)
+                rankText.text = "C";
+            if (percentHit > 75)
+                rankText.text = "B";
+            if (percentHit > 90)
+                rankText.text = "A";
+        
+            finalScoreText.text = currentScore.ToString();
         }
-        //lose game from loss of health
-        else if (audioPlayer.audioSource.isPlaying && playerHealth <= 0)
-        {
-            IGC_Canvas.SetActive(false);
-            WLC_Canvas.SetActive(true);
-            loseScreen.SetActive(true);
-            winScreen.SetActive(false);
-
-        }
-
-            //end of game, show results screen
-
-            //Deactivated by Timothy for now
-            /*
-            if (!audioPlayer.audioSource.isPlaying && !resultsScreen.activeInHierarchy) {
-                resultsScreen.SetActive (true);
-                //calculate hits
-                normalNotesText.text = "" + normalHits;
-                goodNotesText.text = goodHits.ToString();
-                perfectNotesText.text = perfectHits.ToString(); 
-                missedNotesText.text = "" + missedHits;
-                float totalHit = normalHits + goodHits + perfectHits;
-                float percentHit = (totalHit / totalNotes) * 100f;
-                //percent hit
-                percentHitText.text = percentHit.ToString ("F2") + "%";
-                //rank
-                rankText.text = "F";
-                if (percentHit > 30)
-                    rankText.text = "E";
-                if (percentHit > 45)
-                    rankText.text = "D";
-                if (percentHit > 60)
-                    rankText.text = "C";
-                if (percentHit > 75)
-                    rankText.text = "B";
-                if (percentHit > 90)
-                    rankText.text = "A";
-
-                finalScoreText.text = currentScore.ToString();
-            }
-            */
-
-            //Effect management
-            if (Time.time - poisonTime > 1.5f) {
+        */
+        
+        //Effect management
+        if (Time.time - poisonTime > 1.5f) {
             poisonLevel = 0;
         }
 
