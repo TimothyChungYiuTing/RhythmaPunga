@@ -84,6 +84,8 @@ public class ScoreSystem : MonoBehaviour
     public GameObject projectile;
 
     [Header("Win / Lose Data")]
+    public GameObject IGC_Canvas;
+    public GameObject WLC_Canvas;
     public GameObject loseScreen;
     public GameObject winScreen;
 
@@ -103,6 +105,12 @@ public class ScoreSystem : MonoBehaviour
 
         //count the total number of notes in the level
         //totalNotes = FindObjectsOfType <NoteObject>().Length;
+
+        //set the win / loose menus to false from the get-go
+        IGC_Canvas.SetActive(true);
+        WLC_Canvas.SetActive(false);
+        loseScreen.SetActive(false);
+        winScreen.SetActive(false);
     }
 
     //only begin the music once the game has started, only start the game when a putton is pressed
@@ -172,12 +180,16 @@ public class ScoreSystem : MonoBehaviour
         //lose game from time-out
         if (!audioPlayer.audioSource.isPlaying && bossHealth > 0)
         {
+            IGC_Canvas.SetActive(false);
+            WLC_Canvas.SetActive(true);
             loseScreen.SetActive(true);
             winScreen.SetActive(false);
         }
         //lose game from loss of health
         else if (audioPlayer.audioSource.isPlaying && playerHealth <= 0)
         {
+            IGC_Canvas.SetActive(false);
+            WLC_Canvas.SetActive(true);
             loseScreen.SetActive(true);
             winScreen.SetActive(false);
 
