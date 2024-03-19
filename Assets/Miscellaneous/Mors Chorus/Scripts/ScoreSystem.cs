@@ -70,8 +70,8 @@ public class ScoreSystem : MonoBehaviour
     public int bossHealth;
     public int playerMaxHealth;
     public int bossMaxHealth;
-    private List<float> bossDamage = new() { 1.5f, 1f, 1f, 1f };
-    private List<int> bossMaxHealths = new() { 500, 600, 800, 1000 };
+    private List<float> bossDamage = new() { 2f, 1.5f, 1.5f, 1.5f };
+    private List<int> bossMaxHealths = new() { 500, 650, 900, 1200 };
 
     [Header("Effects")]
     public int comboProtection = 0;
@@ -82,6 +82,8 @@ public class ScoreSystem : MonoBehaviour
     public float lastFireTime = -999f; //last fire damage taken's time
 
     public GameObject projectile;
+
+    public bool lost = false;
 
     void Start() {       
         bossHealth = bossMaxHealths[0];
@@ -104,6 +106,11 @@ public class ScoreSystem : MonoBehaviour
     //only begin the music once the game has started, only start the game when a putton is pressed
     void Update()
     {
+        if (!lost && playerHealth <= 0) {
+            lost = true;
+            //TODO: Lost
+        }
+
         if (!shopping && !songStarted && audioPlayer.currentClip == 9 && Input.GetKeyDown(KeyCode.Space)) {
             //Press Space to Load and Start Song
             songStarted = true;
@@ -119,6 +126,12 @@ public class ScoreSystem : MonoBehaviour
         }
         if (songStarted && audioPlayer.currentClip != 9 && !audioPlayer.audioSource.isPlaying) {
             //Song Ended
+
+            if (!lost && bossHealth > 0) {
+                lost = true;
+                //TODO: Lost
+            }
+
             songStarted = false;
             FindObjectOfType<NoteManager>().StopAllCoroutines();
             

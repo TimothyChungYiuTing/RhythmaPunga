@@ -26,6 +26,7 @@ public class MenuManager : MonoBehaviour
 
     private void Update()
     {
+        /*
         if (Input.GetKeyDown (KeyCode.Escape))
         {
             if (isPaused)
@@ -37,6 +38,7 @@ public class MenuManager : MonoBehaviour
                 Pause();
             }
         }
+        */
     }
 
     void Resume()

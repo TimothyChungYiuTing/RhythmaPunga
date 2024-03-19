@@ -28,14 +28,12 @@ public class GameManager : Singleton<GameManager>
     void Update()
     {
         //Debug
+        /*
         if (Input.GetKeyDown(KeyCode.R)) {
-            /*
-            Time.timeScale = 1f;
-            AudioManager.Instance.spatialBlend = 0f;
-            */
-            AudioManager.Instance.ChangeSong(0);
+            noteTypes = new() {NoteType.Normal, NoteType.Normal, NoteType.Normal, NoteType.Normal};
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+        */
 
 
         //DEBUG ONLY

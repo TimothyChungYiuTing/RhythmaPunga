@@ -5741,6 +5741,7 @@ MonoBehaviour:
   lastPoisonTime: -999
   lastFireTime: -999
   projectile: {fileID: 2458282794386899563, guid: 9cdfdf2c2bc3dea4aa74af3c8e09cd60, type: 3}
+  lost: 0
 --- !u!4 &1154957192
 Transform:
   m_ObjectHideFlags: 0
