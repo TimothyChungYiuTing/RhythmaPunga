@@ -3390,6 +3390,16 @@ MonoBehaviour:
   recording: 0
   inputFileIndex: 1
   noteManager: {fileID: 0}
+  SongJSONs:
+  - {fileID: 4900000, guid: 9f910efd553a7754b8119191c81d1dc1, type: 3}
+  - {fileID: 4900000, guid: bb72ffce4e0d1a94c83aac4412392199, type: 3}
+  - {fileID: 4900000, guid: 86bddfce6daf43347b7e08048e927ce2, type: 3}
+  - {fileID: 4900000, guid: 2891d264cf4d7ff47be29c779738f699, type: 3}
+  - {fileID: 4900000, guid: d59b9f95ddac06f4c8a87780386e1d3e, type: 3}
+  - {fileID: 4900000, guid: 66de093e5e63b5b4c9712380c990fd38, type: 3}
+  - {fileID: 4900000, guid: 8168223a41a998e44a231452892a7c6b, type: 3}
+  - {fileID: 4900000, guid: 12cfbf8a849c4d540b80c7095198a33b, type: 3}
+  - {fileID: 4900000, guid: 5f3d319299174c14abd1acc0b082186f, type: 3}
 --- !u!4 &714429139
 Transform:
   m_ObjectHideFlags: 0

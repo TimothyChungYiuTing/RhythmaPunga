@@ -41,6 +41,8 @@ public class InputRecorder : MonoBehaviour
         "/Resources/Song8Input.json", // Calibration
     };
 
+    public List<TextAsset> SongJSONs;
+
     private void Start()
     {
         noteManager = FindObjectOfType<NoteManager>();
@@ -92,13 +94,18 @@ public class InputRecorder : MonoBehaviour
             Destroy(child.gameObject);
         }
 
+        InputData inputData;
         if (File.Exists(filePath)) {
             string json = File.ReadAllText(filePath);
-            InputData inputData = JsonUtility.FromJson<InputData>(json);
-            if (inputData != null && inputData.songNotesArray != null) {
-                inputRecords.AddRange(inputData.songNotesArray);
-                noteManager.notes.AddRange(inputData.songNotesArray);
-            }
+            inputData = JsonUtility.FromJson<InputData>(json);
+        }
+        else {
+            inputData = JsonUtility.FromJson<InputData>(SongJSONs[inputFileIndex].text);
+        }
+        
+        if (inputData != null && inputData.songNotesArray != null) {
+            inputRecords.AddRange(inputData.songNotesArray);
+            noteManager.notes.AddRange(inputData.songNotesArray);
         }
         noteManager.InstantiateNotes(); //This calls a coroutine to make sure all notes are instantiated before starting the song
     }
