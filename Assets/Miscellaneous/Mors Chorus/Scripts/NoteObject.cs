@@ -43,10 +43,13 @@ public class NoteObject : MonoBehaviour
 
     private GameObject enemyProj = null;
     private VFXManager vFXManager;
+    
+    private ScoreSystem scoreSystem;
 
     void Start()
     {
         startTime = FindObjectOfType<InputRecorder>().startTime;
+        scoreSystem = FindObjectOfType<ScoreSystem>();
 
         vFXManager = FindObjectOfType<VFXManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -99,7 +102,7 @@ public class NoteObject : MonoBehaviour
                 if (Vector2.Distance(transform.position, collidedActivator.position) > 0.65) {
                     Debug.Log("Normal Hit");
                     Instantiate(normalEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
-                    ScoreSystem.Instance.NormalHit(noteType);
+                    scoreSystem.NormalHit(noteType);
 
                     vFXManager.Lit_PlayBG();
                     if ((int)noteType < 7) {
@@ -123,7 +126,7 @@ public class NoteObject : MonoBehaviour
                 else if (Vector2.Distance(transform.position, collidedActivator.position) > 0.4) {
                     Debug.Log("Good Hit!");
                     Instantiate(goodEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
-                    ScoreSystem.Instance.GoodHit(noteType);
+                    scoreSystem.GoodHit(noteType);
 
                     vFXManager.Lit_PlayBG();
                     if ((int)noteType < 7) {
@@ -147,11 +150,11 @@ public class NoteObject : MonoBehaviour
                 else {
                     Debug.Log("Perfect Hit!!");
                     Instantiate(perfectEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10f, 10f))), effectsHolder.transform);
-                    ScoreSystem.Instance.PerfectHit(noteType);
+                    scoreSystem.PerfectHit(noteType);
 
                     vFXManager.Lit_PlayBG();
                     if ((int)noteType < 7) {
-                        if (!(ScoreSystem.Instance.combo < 5 && noteType == NoteType.Zap)) {
+                        if (!(scoreSystem.combo < 5 && noteType == NoteType.Zap)) {
                             GameObject proj = Instantiate(projectile, transform.position, Quaternion.identity, projHolder.transform); 
                             proj.GetComponent<Projectile>().noteType = noteType;
                         }
@@ -298,7 +301,7 @@ public class NoteObject : MonoBehaviour
             if (!obtained) {
                 Debug.Log ("Note Missed");
                 Instantiate(missEffect, transform.position, Quaternion.Euler(new Vector3(0, 0, Random.Range(-10, 10))), effectsHolder.transform);
-                ScoreSystem.Instance.NoteMissed(noteType);
+                scoreSystem.NoteMissed(noteType);
 
                 obtained = true;
             }

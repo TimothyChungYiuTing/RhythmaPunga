@@ -8,10 +8,13 @@ public class Activator : MonoBehaviour
     public KeyCode keyCode;
     public Sprite DefenseSprite;
     public Sprite OffenseSprite;
+
+    private ScoreSystem scoreSystem;
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        scoreSystem = FindObjectOfType<ScoreSystem>();
     }
 
     // Update is called once per frame
@@ -26,7 +29,7 @@ public class Activator : MonoBehaviour
             transform.localScale = Vector3.one * 0.7f;
         }
 
-        if (ScoreSystem.Instance.mode == Mode.Defense) {
+        if (scoreSystem.mode == Mode.Defense) {
             spriteRenderer.sprite = DefenseSprite;
         } else {
             spriteRenderer.sprite = OffenseSprite;

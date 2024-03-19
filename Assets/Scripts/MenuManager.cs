@@ -8,6 +8,12 @@ public class MenuManager : MonoBehaviour
     public static bool isPaused = false;
     public GameObject pauseMenuUI;
 
+    private ScoreSystem scoreSystem;
+
+    void Start()
+    {
+        scoreSystem = FindObjectOfType<ScoreSystem>();
+    }
     public void MoveToScene (int sceneID)
     {
         SceneManager.LoadScene(sceneID);

@@ -8,7 +8,7 @@ using System;
 using UnityEngine.Rendering.Universal;
 
 public enum Mode {Defense, Offense}
-public class ScoreSystem : Singleton<ScoreSystem>
+public class ScoreSystem : MonoBehaviour
 {
     public Mode mode;
     public Light2D globalLight;
@@ -65,9 +65,6 @@ public class ScoreSystem : Singleton<ScoreSystem>
     public bool songStarted = false;
     public InGameCanvas inGameCanvas;
 
-    [Header("Calibration Sync")]
-    public float offset = 0f;  //Calibration syncing, added onto hitTime
-
     [Header("Health")]
     public int playerHealth;
     public int bossHealth;
@@ -89,6 +86,8 @@ public class ScoreSystem : Singleton<ScoreSystem>
     void Start() {       
         bossHealth = bossMaxHealths[0];
         bossMaxHealth = bossMaxHealths[0];
+
+        inGameCanvas = FindObjectOfType<InGameCanvas>();
         // inGameCanvas.UpdateHealth(); - - - - - - - add back in TODO
 
         //display the score as 0 from the beginning

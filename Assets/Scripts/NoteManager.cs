@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class NoteManager : MonoBehaviour
 {
@@ -11,10 +12,12 @@ public class NoteManager : MonoBehaviour
     [Header("NotePrefabs")]
     public GameObject NotePrefab;
 
+    private ScoreSystem scoreSystem;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        scoreSystem = FindObjectOfType<ScoreSystem>();
     }
 
     // Update is called once per frame
@@ -33,7 +36,7 @@ public class NoteManager : MonoBehaviour
             GameObject noteInstantiated = Instantiate(NotePrefab, new Vector3(-50f, 20f, 6f), Quaternion.identity, transform);
             NoteObject noteObject_inInstantiated = noteInstantiated.GetComponent<NoteObject>();
 
-            noteObject_inInstantiated.hitTime = inputRecord.time + ScoreSystem.Instance.offset;  //Add offset to hitTIme
+            noteObject_inInstantiated.hitTime = inputRecord.time + Offset.Instance.offset;  //Add offset to hitTIme
 
             if (inputRecord.note == "W") {
                 noteObject_inInstantiated.noteDirection = NoteObject.NoteDirection.W;
@@ -98,6 +101,6 @@ public class NoteManager : MonoBehaviour
             yield return null;
         }
 
-        ScoreSystem.Instance.StartSong();
+        scoreSystem.StartSong();
     }
 }

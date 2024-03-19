@@ -14,11 +14,11 @@ public class CalibrationScreen : MonoBehaviour
     void Start()
     {
         // Set the initial value of the scrollbar to correspond to offset 0
+        offsetInputField.text = Offset.Instance.offset.ToString("0.##");
         scrollbar.value = 0.5f;
 
         // Subscribe to input field value changes
         offsetInputField.onValueChanged.AddListener(OnInputFieldValueChanged);
-
 
         // Subscribe the input field value to match the offset
         scrollbar.onValueChanged.AddListener(OffsetDisplayUpdate);
@@ -27,19 +27,16 @@ public class CalibrationScreen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     private void OffsetDisplayUpdate(float value)
     {
-        offsetInputField.text = ScoreSystem.Instance.offset.ToString();
-
-
         // Update the offset based on the scrollbar value
-        ScoreSystem.Instance.offset = (value - 0.5f) * 2f;
+        Offset.Instance.offset = (value - 0.5f) * 2f;
 
         // Update the input field value accordingly
-        offsetInputField.text = ScoreSystem.Instance.offset.ToString();
+        offsetInputField.text = Offset.Instance.offset.ToString("0.##");
     }
 
     // Callback when the input field value changes
@@ -58,7 +55,7 @@ public class CalibrationScreen : MonoBehaviour
             scrollbar.value = scrollbarValue;
 
             // Update the offset in the ScoreSystem
-            ScoreSystem.Instance.offset = offsetValue;
+            Offset.Instance.offset = offsetValue;
         }
     }
 }

@@ -69,10 +69,13 @@ public class InGameCanvas : MonoBehaviour
     public TextMeshProUGUI Text_PoisonNum;
 
     public GameObject projectile;
+    
+    private ScoreSystem scoreSystem;
 
     // Start is called before the first frame update
     void Start()
     {
+        scoreSystem = FindObjectOfType<ScoreSystem>();
         ReloadItems();
         
         GameManager.Instance.NewChooseItems();
@@ -98,7 +101,7 @@ public class InGameCanvas : MonoBehaviour
 
     public void LoadChooseItems()
     {
-        ScoreSystem.Instance.shopping = true;
+        scoreSystem.shopping = true;
         selected = -1;
         Text_ChooseOne.text = "Choose One";
         ChoosePopup.SetActive(true);
@@ -123,12 +126,12 @@ public class InGameCanvas : MonoBehaviour
     public void CloseChooseItems()
     {
         //FindObjectOfType<InputRecorder>().TryLoadInputRecords();
-        ScoreSystem.Instance.shopping = false;
+        scoreSystem.shopping = false;
         ChoosePopup.SetActive(false);
         choosingItem = false;
 
         //Heal 30% HP
-        ScoreSystem.Instance.playerHealth = (int)Mathf.Clamp(ScoreSystem.Instance.playerHealth + ScoreSystem.Instance.playerMaxHealth * 0.3f, 0f, ScoreSystem.Instance.playerMaxHealth);
+        scoreSystem.playerHealth = (int)Mathf.Clamp(scoreSystem.playerHealth + scoreSystem.playerMaxHealth * 0.3f, 0f, scoreSystem.playerMaxHealth);
         GameObject proj = Instantiate(projectile, transform.position, Quaternion.identity); 
         proj.GetComponent<Projectile>().noteType = NoteType.Heal;
         UpdateHealth();
@@ -136,7 +139,7 @@ public class InGameCanvas : MonoBehaviour
 
     public void SwapItem(int swapID)
     {
-        if (!ScoreSystem.Instance.songStarted) {
+        if (!scoreSystem.songStarted) {
             if (selected != -1) {
                 if (selected < 2) {
                     //Swap chosen Note with Key
@@ -146,7 +149,7 @@ public class InGameCanvas : MonoBehaviour
                     ReloadItems();
                     
                     //FindObjectOfType<InputRecorder>().TryLoadInputRecords();
-                    ScoreSystem.Instance.shopping = false;
+                    scoreSystem.shopping = false;
                     ChoosePopup.SetActive(false);
                     choosingItem = false;
                 } else {
@@ -171,10 +174,10 @@ public class InGameCanvas : MonoBehaviour
 
     public void UpdateHealth()
     {
-        Text_PlayerHealth.text = ScoreSystem.Instance.playerHealth.ToString() + " / " + ScoreSystem.Instance.playerMaxHealth;
-        Text_BossHealth.text = ScoreSystem.Instance.bossHealth.ToString() + " / " + ScoreSystem.Instance.bossMaxHealth;
-        playerHealthBar.offsetMax = new Vector2(Mathf.Lerp(-297f, -3f, (float)ScoreSystem.Instance.playerHealth/ScoreSystem.Instance.playerMaxHealth), playerHealthBar.offsetMax.y);
-        bossHealthBar.offsetMin = new Vector2(Mathf.Lerp(297f, 3f, (float)ScoreSystem.Instance.bossHealth/ScoreSystem.Instance.bossMaxHealth), bossHealthBar.offsetMin.y);
+        Text_PlayerHealth.text = scoreSystem.playerHealth.ToString() + " / " + scoreSystem.playerMaxHealth;
+        Text_BossHealth.text = scoreSystem.bossHealth.ToString() + " / " + scoreSystem.bossMaxHealth;
+        playerHealthBar.offsetMax = new Vector2(Mathf.Lerp(-297f, -3f, (float)scoreSystem.playerHealth/scoreSystem.playerMaxHealth), playerHealthBar.offsetMax.y);
+        bossHealthBar.offsetMin = new Vector2(Mathf.Lerp(297f, 3f, (float)scoreSystem.bossHealth/scoreSystem.bossMaxHealth), bossHealthBar.offsetMin.y);
     }
 
     public void HoverChooseItem(int hoverID)

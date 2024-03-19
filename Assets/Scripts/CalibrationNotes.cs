@@ -16,13 +16,13 @@ public class CalibrationNotes : MonoBehaviour
 
     void Update()
     {
-        transform.position = startPos + (Time.time - resetTime) * Vector3.left * speed + (ScoreSystem.Instance.offset * Vector3.left * speed);
+        transform.position = startPos + (Time.time - resetTime) * Vector3.left * speed + (Offset.Instance.offset * Vector3.left * speed);
     }
 
     public void ResetPosition()
     {
         resetTime = Time.time;
         transform.position = startPos;
-        transform.position += (ScoreSystem.Instance.offset * Vector3.left * speed);
+        transform.position += (Offset.Instance.offset * Vector3.left * speed);
     }
 }
